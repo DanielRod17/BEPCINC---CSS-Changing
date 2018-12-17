@@ -1,0 +1,412 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : Oct 15, 2018, 4:01:46 PM
+    Author     : luisr
+*/
+body, html{
+    width:                          100%;
+    min-height:                     100%;
+    margin:                         0;
+}
+
+#alertas{
+    width:                          350px;
+    min-height:                     45px;
+    /*margin-top:                     calc(-65px);*/
+    margin-left:                    calc(100% - 350px);
+    z-index:                        9000;
+    position:                       fixed;
+    background-color:               rgba(20, 20, 20, 0.7);
+    float:                          right;
+    opacity:                        0;
+    transition:                     opacity 0.5s ease-in-out;
+    color:                          white;
+    font-family:                    'Cairo';
+    font-size:                      15px;
+    line-height:                    45px;
+    text-align:                     center;
+}
+.titulo{
+    /*background-color:               pink;*/
+    width:                          100%;
+    text-align:                     center;
+    height:                         45px;
+    line-height:                    40px;
+    font-family:                    bebasneue-light;
+    font-size:                      40px;
+    font-weight:                    bold;
+    margin-bottom:                  20px;
+    margin-top:                     20px;
+  
+}
+
+#datepicker {
+    float:                          left;
+    width:                          200px;
+    height:                         30px;
+}
+
+#contenedor{
+    width:                          calc(100% - 1px);
+    height:                         100%;
+    /*background-color:               yellow;*/
+}
+#buscador{
+    height:                         80px;
+    width:                          100%;
+    /*background-color:               cyan*/;
+}
+#timecards{
+    min-height: 300px;
+    width: 100%;
+    font-family: bebasneue-light;
+    font-weight: 600;
+    letter-spacing: 1;
+}
+#searchParams{
+    width:                          60%;
+    height:                         100%;
+    /*background-color:               pink*/;
+    float:                          left;
+}
+#image{
+    width:                          10%;
+    height:                         100%;
+    float:                          left;
+    background-color:               yellow;
+}
+#banner{
+    width:                          90%;
+    margin-left:                    10%;
+    height:                         40%;
+    /*background-color:               navy*/;
+}
+#search{
+    width:                          90%;
+    float:                          left;
+    height:                         60%;
+    /*background-color:               green*/;
+    line-height:                    48px;
+}
+#parameter{
+    width:                          200px;
+    height:                         30px;
+    transition:                     all 0.6s ease;
+    border-color:                   gray;
+    border-width:                   2px;
+}
+#parameter:hover{
+    border-color:                   navy;
+}
+#tableInfo{
+    width:                          100%;
+    height:                         65px;
+}
+#searchButton{
+    height:                         30px;
+    width:                          40px;
+    border:                         none;
+    background-color:               firebrick;
+}
+#new{
+    width:                          90px;
+    height:                         100%;
+    float:                          right;
+    background-color:               purple;
+    line-height:                    80px;
+    color:                          white;
+    text-align:                     center;
+}
+#botonNew{
+    width:                          100%;
+    height:                         100%;
+    border:                         none;
+    font-size:                      300%;
+    background-color:               white;
+    transition:                     all 0.3s ease;
+    cursor:                         pointer;
+    color:                          gray;
+}
+
+#botonNew:hover{
+    color:                          black;
+}
+#timeTable{
+    width:                          100%;
+    color:                          black;
+}
+table{
+    column-span:                    all;
+    border-collapse:                collapse;
+}
+tr{
+}
+#timeTable td{
+    border-style:                   solid;
+    border-width:                   0.5px;
+    text-align:                     left;
+    height:                         40px;
+}
+th{
+    background-color:               #f4f4f4;
+    text-align:                     left;
+    height:                         45px;
+}
+#bottom{
+    width:                          100%;
+    height:                         calc(100% - 380px);
+    background-color:               rgb(34, 153, 191);
+}
+.DaysInput{
+    background-color:               white;
+}
+.hourDay{
+    width:                          100% !important;
+    height:                         95% !important;
+    border:                         none;
+    text-align:                     center;
+    font-size:                      120%;
+    margin-bottom:                  0px !important;
+}
+.project{
+    width:                          100% !important;
+    height:                         100%;
+    border:                         none;
+}
+.updateProj{
+    width:                          30%;
+    color:                          black;
+    padding-left:                   20px;
+}
+.updateProj .icon{
+    position:                       absolute;
+    /*pointer-events:                 none;*/
+    margin-left:                   calc(25% - 25px);
+    margin-top:                     10px;
+    cursor:                         pointer;
+}
+#modal{
+    width:                          100%;
+    height:                         100%;
+    position:                       fixed;
+    background-color:               rgba(20, 20, 20, 0.6);
+    margin-top:                     0%;
+    margin-left:                    0%;
+    float:                          left;
+    z-index:                        600000000;
+    opacity:                        0;
+    pointer-events:                 none;
+    transition:                     all ease 1s;
+}
+
+
+.w3-animate-show{
+    animation:                      show 0.5s;
+    animation-fill-mode:            forwards;
+    pointer-events:                 auto;
+}
+
+.w3-animate-hide{
+    animation:                      hide 0.5s;
+    animation-fill-mode:            forwards;
+    pointer-events:                 none;
+}
+
+@keyframes show{
+    0%{
+        opacity:                        0
+    }
+    100%{
+        opacity:                        1
+    }
+}
+@keyframes hide{
+    0%{
+        opacity:                        1
+    }
+    100%{
+        opacity:                        0
+    }
+}
+
+.modalesCon{
+    width:                          400px;
+    min-height:                     450px;
+    background-color:               white;
+    margin-left:                    calc(50% - 200px);
+    margin-top:                     calc(25% - 225px);
+    pointer-events:                 auto;
+    font-family:                    'Cairo';
+    display:                        none;
+}
+.banner{
+    width:                          100%;
+    height:                         25px;
+    float:                          left;
+    background-color:               rgb(20, 20, 20);
+    color:                          white;
+    font-size:                      15px;
+    line-height:                    25px;
+}
+.projectos{
+    width:                          100%;
+    min-height:                     205px;
+}
+.projItem{
+    width:                          100%;
+    min-height:                     25px;
+    font-size:                      15px;
+    line-height:                    25px;
+    word-wrap:                      break-word;
+    background-color:               white;
+    cursor:                         pointer;
+    transition:                     all 0.2s ease;
+}
+.projItem:hover{
+    background-color:               rgba(20, 20, 20, 0.8);
+    color:                          white;
+}
+
+.box {
+    width: 90%;
+    float: left;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 0 3px 3px 0 rgba(0,0,0,.15);
+    margin-left: 5%;
+}
+
+.signup-box {
+    margin: auto;
+    min-height: 48%;
+    background-color: white;
+    width: 100%;
+    padding: 20px;
+}
+
+#buscador {
+    height: 80px;
+    width: 97%;
+    /* background-color: cyan; */
+}
+
+#searchParams {
+    width: 60%;
+    height: 97%;
+    /* background-color: pink; */
+    float: left;
+    padding-top: 2px;
+}
+
+#parameter {
+    width: 400px;
+    height: 35px;
+    transition: all 0.6s ease;
+    border-color: #bdbdbd;
+    border-width: 1px;
+    float: right;
+}
+
+#parameter1 {
+    width: 400px;
+    height: 35px;
+    /* transition: all 0.6s ease; */
+    border-color: #f4f4f4;
+    border-width: 0.5px;
+    float: left;
+    border-radius: 5px;
+    background: #f4f4f4;
+    text-align: center;
+    margin-top: 5%;
+}
+
+.wrapper{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 150px;
+  font-family: bebasneue-light;
+  font-size: 25px;
+  text-align: center;
+}
+
+.wrapper > div{
+  min-height: 10px;
+  background: #f4f4f4;
+  padding: 1px;
+  padding-top: -110px;
+}
+
+.wrapper >div:nth-child(odd){
+  background: #f4f4f4;
+  padding-top: -110px;
+}
+
+#wrapper h1{
+  font-size:35px;
+  float: left;
+  font-family: bebasneue-light;
+}
+
+
+.button input{
+  width: 200px;
+  padding: 20px;
+  border: #BDBDBD 1px solid;
+  outline: none;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: bebasneue-light;
+  cursor: pointer;
+  margin: 33px 100px 40px 0px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#sourceEm{
+    width: 400px;
+    height: 35px;
+    /* transition: all 0.6s ease; */
+    border-color: #f4f4f4;
+    border-width: 0.5px;
+    float: left;
+    border-radius: 5px;
+    background: #f4f4f4;
+    text-align: center;
+    margin-right: 20%;
+    margin-top: 1%;
+}
+
+.project {
+    width:        105% !important;
+    height:       100% !important;
+    margin-bottom: 0% !important;
+    margin-bottom: 0% !important;
+    margin-left: -5%;
+}
+
+#cardSearch{
+    border-box:                 box-sizing;
+    background-position:        14px 12px;
+    background-repeat:          no-repeat;
+    font-size:                  16px;
+    border:                     none;
+}
+.cardSearchOpt{
+    height:                     20px;
+    text-decoration:            none;
+    background-color:           white;
+    position:                   relative;
+    background-color:           black;
+    color:                      white;
+    top:                        5px;
+    width:                      80%;
+    display:                    none;
+}
+.searchParam{
+    z-index:                    5000;
+}

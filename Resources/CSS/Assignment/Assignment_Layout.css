@@ -1,0 +1,224 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Aug 21, 2018, 9:26:18 AM
+    Author     : luisr
+*/
+body, html{
+    width:                          100%;
+    min-height:                     100%;
+    margin:                         0;
+}
+#container{
+    width:                          100%;
+    height:                         100%;
+    /*background-color:               red;*/
+}
+
+.Linea{
+    width:                          100%;
+    height:                         67px;
+    /*background-color:               black;*/
+    margin-bottom:                  7px;
+}
+#alertas{
+    width:                          350px;
+    min-height:                         45px;
+    margin-top:                     calc(-65px);
+    margin-left:                    calc(100% - 350px);
+    z-index:                        9000;
+    position:                       fixed;
+    background-color:               rgba(20, 20, 20, 0.7);
+    float:                          right;
+    opacity:                        0;
+    transition:                     opacity 0.5s ease-in-out;
+    color:                          white;
+    font-family:                    'Cairo';
+    font-size:                      15px;
+    line-height:                    45px;
+    text-align:                     center;
+}
+.titulo{
+    /*background-color:               pink;*/
+    width:                          100%;
+    text-align:                     center;
+    height:                         45px;
+    line-height:                    40px;
+    font-family:                    'Cairo';
+    font-size:                      40px;
+    font-weight:                    bold;
+    margin-bottom:                  20px;
+}
+.plaecHolder{
+    width:                          70%;
+    height:                         25px;
+    font-family:                    'Cairo';
+    font-size:                      20px;
+    margin-bottom:                  7px;
+}
+.entrada{
+    width:                          80%;
+    height:                         35px;
+    margin-bottom:                  15px;
+    /*background-color:               red;*/
+}
+.plaecHolder2{
+    width:                          25%;
+    margin-right:                   14%;
+    height:                         25px;
+    float:                          left;
+    font-family:                    'Cairo';
+    font-size:                      20px;
+    margin-bottom:                  7px;
+}
+.entrada2{
+    width:                          25%;
+    margin-right:                   14%;
+    height:                         35px;
+    margin-bottom:                  15px;
+    float:                          left;
+    /*background-color:               red;*/
+}
+
+#Assignment{
+    width:                          75%;
+    min-height:                     calc(100% - 65px);
+    margin-left:                    32.5%;
+}
+
+.day{
+    width:                          calc(80% / 8.3);
+    margin-right:                   5px;
+    height:                         90px;
+    background-color:               black;
+    float:                          left;
+}
+.tag{
+    width:                          100%;
+    height:                         30px;
+    background-color:               black;
+    text-align:                     center;
+    font-size:                      1.2vw;
+    line-height:                    30px;
+    color:                          white;
+}
+.inpTag{
+    width:                          100%;
+    height:                         60px;
+}
+.dayNum{
+    width:                          100%;
+    height:                         100%;
+    font-size:                      30px;
+    text-align:                     center;
+}
+.unico{
+    width:                          70%;
+    height:                         100%;
+    transition:                     all 0.4s ease;
+    border-color:                   rgb(120, 120, 120);
+    border-style:                   solid;
+    outline-width:                  0;
+}
+.unico:hover{
+    border-color:                   orange;/*rgb(38, 160, 218);*/
+    transition:                     all 0.4s ease;
+}
+.unico:focus{
+    border-color:                   orange;
+}
+.atribute{
+    width:                          50%;
+    height:                         100%;
+    transition:                     all 0.4s ease;
+    border-color:                   rgb(120, 120, 120);
+    border-style:                   solid;
+    float:                          left;
+    outline-width:                  0;
+}
+.atribute:hover{
+    border-color:                   orange;/*rgb(38, 160, 218);*/
+    transition:                     all 0.4s ease;
+}
+.atribute:focus{
+    border-color:                   orange;
+}
+.dos{
+    width:                          25%;
+    height:                         100%;
+    margin-left:                    calc(50%/5);
+    border-color:                   rgb(120, 120, 120);
+    border-style:                   solid;
+    outline-width:                  0;
+}
+.dos:hover{
+    border-color:                   orange;/*rgb(38, 160, 218);*/
+    transition:                     all 0.4s ease;
+}
+.dos:focus{
+    border-color:                   orange;
+}
+.checkes{
+    position:                       absolute;
+    opacity:                        0;
+    cursor:                         pointer;
+    width:                          30px;
+    height:                         30px;
+    margin-top:                     2.5px;
+    margin-left:                    20px;
+    z-index:                        40;
+}
+.checkmark{
+    position:                       absolute;
+    height:                         30px;
+    margin-top:                     2.5px;
+    margin-left:                    20px;
+    width:                          30px;
+    border-color:                   rgba(120, 120, 120, 0.8);
+    border-style:                   solid;
+    border-width:                   0.3px;
+    transition:                     all 0.3s ease;
+}
+/*.checkes:hover input ~ .checkmark {
+    background-color:               #2196F3;
+}*/
+.entrada input:checked ~ .checkmark {
+    background-color:               orange;/*#2196F3;*/
+    content:                        "";
+}
+
+.checkmark:after {
+    content:                        "";
+    position:                       absolute;
+    display:                        none;
+}
+
+/* Show the checkmark when checked */
+.entrada input:checked ~ .checkmark:after {
+    display:                        block;
+}
+
+/* Style the checkmark/indicator */
+.entrada .checkmark:after {
+    left:                           9px;
+    top:                            5px;
+    width:                          5px;
+    height:                         10px;
+    border:                         solid white;
+    border-width:                   0 3px 3px 0;
+    -webkit-transform:              rotate(45deg);
+    -ms-transform:                  rotate(45deg);
+    transform:                      rotate(45deg);
+}
+#submittir{
+    width:                          20%;
+    height:                         40px;
+    background-color:               orange;
+    border:                         none;
+    margin-top:                     20px;
+    margin-bottom:                  20px;
+    font-size:                      110%;
+}

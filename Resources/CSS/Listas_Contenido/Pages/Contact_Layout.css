@@ -1,0 +1,21 @@
+.TCRDcolumna{
+    width:                          calc(100% / 4);
+    height:                         100%;
+    float:                          left;
+    line-height:                    25px;
+    padding-left:                   10px;
+}
+.PRJcolumna{
+    width:                          calc(87% / 3);
+    height:                         100%;
+    float:                          left;
+    line-height:                    25px;
+    padding-left:                   10px;
+}
+.ASScolumna{
+    width:                          calc(85% / 5);
+    height:                         100%;
+    float:                          left;
+    line-height:                    25px;
+    padding-left:                   10px;
+}
