@@ -167,7 +167,7 @@ th{
 .hourDay{
     width:                          100% !important;
     height:                         95% !important;
-    border:                         none;
+    border:                         none !important;
     text-align:                     center;
     font-size:                      120%;
     margin-bottom:                  0px !important;
@@ -382,11 +382,11 @@ th{
 }
 
 .project {
-    width:        105% !important;
+    width:        104% !important;
     height:       100% !important;
     margin-bottom: 0% !important;
     margin-bottom: 0% !important;
-    margin-left: -5%;
+    margin-left: -4%;
 }
 
 #cardSearch{

@@ -9,6 +9,7 @@ session_start();
 //echo $_SESSION['dataBase']. " ". $_SESSION['loggedin']. " ". $_SESSION['userID']. " ". $_SESSION['userName'];
 $IDUsuario =            $_SESSION['consultor']["ID"];
 $UserName =             $_SESSION['consultor']["SN"];
+$Td_u =                 date('m/d/Y', strtotime('next Sunday', strtotime(date("Y-m-d"))));
 unset($_SESSION['fecha']);
 include('../Resources/WebResponses/connection.php'); //Include de connection file
 //If the user is loged in
@@ -35,10 +36,13 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
             <script>
                 $( function() {
                     $( "#datepicker" ).datepicker({
-                        altFormat: 'yyyy-mm-dd',  // Date Format used
-                        firstDay: 0, // Start with Monday
+                        beforeShowDay: function(date) {
+                            var day = date.getDay();
+                            return [(day == 0), ''];
+                        }
                     });
                 });
+                actualizarTabla(document.getElementById('datepicker'));
             </script>
             <meta charset="UTF-8">
             <title>
@@ -95,10 +99,11 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
             <div class="sidebar-contact" style="width: 90%; margin-left: -90%;">
                 <div class="contenedor">
                     <h2>NEW TIMECARD</h2>
+                    <?php echo $_SESSION['consultor']['FirstName']." ".$_SESSION['consultor']['LastName']." - ".$_SESSION['consultor']['Title'];  ?>
                     <hr id='line'>
                     <div id="timecards">
                     <div id="tableInfo">
-                        <button style='float: left; height:  30px;' onclick="weekChange('0');"><<</button><input type="text" id="datepicker" onchange="actualizarTabla(this);" autocomplete="off"><button  style='float: left; height:  30px;' onclick="weekChange('1');">>></button>
+                        <button style='float: left; height:  30px;' onclick="weekChange('0');"><<</button><input type="text" placeholder="Week Ending" id="datepicker" onchange="actualizarTabla(this);" autocomplete="off" value="<?php echo $Td_u; ?>" ><button  style='float: left; height:  30px;' onclick="weekChange('1');">>></button>
                         <input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' id='guardar' type='submit' form='timeForms' value='Save'>
                         <input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' type='submit' form="" onclick="Approve();" disabled id="approve" value="Submit">
                     </div>
@@ -116,34 +121,51 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                 <th>Sum</th>
                                 <th>Status</th>
                             </tr>
-                            <?php
-                                echo "<form id='timeForms' onsubmit='return guardarTimecard();'>";
-                                for($i = 1; $i <= 5; $i++){
-                                    echo"
-                                    <tr class='DaysInput $i'>
-                                        <td class='updateProj'>
-                                            <i class='icon fas fa-search' onclick=\"DisplayProjects('$i');\" ></i>
-                                            <input type='text'  class='project $i'></td>
-                                        <td class='updateDay'><input type='number' class ='hourDay' min='0' max='24'></td>
-                                        <td class='updateDay'><input type='number' class ='hourDay' min='0' max='24'></td>
-                                        <td class='updateDay'><input type='number' class ='hourDay' min='0' max='24'></td>
-                                        <td class='updateDay'><input type='number' class ='hourDay' min='0' max='24'></td>
-                                        <td class='updateDay'><input type='number' class ='hourDay' min='0' max='24'></td>
-                                        <td class='updateDay'><input type='number' class ='hourDay' min='0' max='24'></td>
-                                        <td class='updateDay'><input type='number' class ='hourDay' min='0' max='24'></td>
-                                        <td class='sum'></td>
-                                        <td></td>
-                                    </tr>";
-                                }
-                                echo "</form>";
-                            ?>
                         </thead>
+                        <?php
+                            echo "<form id='timeForms' onsubmit='return guardarTimecard();'>";
+                            for($i = 1; $i <= 5; $i++){
+                                echo"
+                                <tr class='DaysInput $i'>
+                                    <td class='updateProj'>
+                                        <i class='icon fas fa-search' onclick=\"DisplayProjects('$i');\" ></i>
+                                        <input type='text' placeholder='Select Assigment' class='project $i'></td>
+                                    <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
+                                    <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
+                                    <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
+                                    <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
+                                    <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
+                                    <td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'></td>
+                                    <td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'></td>
+                                    <td class='sum'></td>
+                                    <td></td>
+                                </tr>";
+                            }
+                            echo "</form>
+                                <tr class='DaysInput'>
+                                    <td class='updateProj'>
+                                        Totals
+                                    <td class='updateDay'>0</td>
+                                    <td class='updateDay'>0</td>
+                                    <td class='updateDay'>0</td>
+                                    <td class='updateDay'>0</td>
+                                    <td class='updateDay'>0</td>
+                                    <td class='updateDay' style='background-color: rgb(220, 220, 220);'>0</td>
+                                    <td class='updateDay' style='background-color: rgb(220, 220, 220);'>0</td>
+                                    <td class='sum' id='totalSum'>0</td>
+                                    <td></td>
+                                </tr>";
+                        ?>
                     </table>
                 </div>
                     </div>
             <div class="cont-boton">
-                <input type="submit" name="" value="ADD" id='submittir' form="Project">
-                <input type="submit" name="" value="Add another" id='submittir'>
+                <select id="addLineas" style="float: left; width: 50px; margin-right: 10px; margin-top: 20px;">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+                <input type="submit" name="" value="Add another" onclick="AgregarLineas();">
                 <input type="button" id="cancel-boton" value="cancel" onclick='Reset();'>
             </div>
             <?php

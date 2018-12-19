@@ -38,18 +38,8 @@ while($row = $querySponsors->fetch_array()){
                     <body style='margin: 0; padding: 0;'>
                         <table align='center' border='1' cellpadding='0' cellspacing='0' width='600' style='border-collapse: collapse;'>
                             <tr>
-                                <td bgcolor='#254366' height='100px' style='color: white; text-align: center; font-size: 50px;'>
-                                    You were assigned a travel
-                                </td>
-                            </tr>
-                            <tr>
                                 <td bgcolor='#ffffff'>
-                                    <table cellpadding='20' cellspacing='0' width='600' style='border-collapse: collapse;'> 
-                                        <tr>
-                                            <td height='80px' colspan='2'>
-                                                <img src='cid:logo1' alt='' width='420' height='60' style='margin-left: 10%; display: block;'/>
-                                            </td>
-                                        </tr>
+                                    <table cellpadding='20' cellspacing='0' width='600' style='border-collapse: collapse;'>
                                         <tr>
                                             <td bgcolor='#254366' style='color: white; text-align: center; font-size: 15px;' height='20'>
                                                 End Date
@@ -115,7 +105,7 @@ while($row = $querySponsors->fetch_array()){
                         $hours +=   $Cards[$dia];
                     }
                     echo "<tr>
-                        <td>".$Cards['Ending']."</td><td>".$Cards['aName']."</td><td>".$Cons['Firstname']." ".$Cons['Lastname']."</td><td>".$Cards['TimecardID']."</td><td>"."$hours</td><td>Sponsor".$row['Name']."</td><tr>";
+                        <td>".$Cards['Ending']."</td><td>".$Cards['aName']."</td><td>".$Cons['Firstname']." ".$Cons['Lastname']."</td><td>".$Cards['TimecardID']."</td><td>"."$hours</td><td>".$row['Name']."</td><tr>";
                 }
                 /////////////////////////////////////////
             }else{

@@ -114,7 +114,9 @@ if(isset($_POST['insertar'])){
                     $Fr =               $linea[5];
                     $Sa =               $linea[6];
                     $Su =               $linea[7];
-                    $SD =               $_SESSION['fecha'];
+                    $SD =               $_SESSION['fechaSearch'];
+                    $SD =               strtotime("$SD -6 days");
+                    $SD =               date("Y-m-d", $SD);
                     $CD =               date("Y-m-d H:i:s");
                     $insertar ->        execute();
                     $insertar ->        close();
@@ -147,19 +149,31 @@ if(isset($_POST['fecha'])){
     $output =                   array();
     $_SESSION['fecha'] =        $_POST['fecha'];
     $_SESSION['fechaSearch'] =  $_POST['fecha'];
-    $query =                    $connection->prepare("SELECT c.ID, Firstname, Lastname FROM consultors AS c
-                                                        LEFT JOIN timecards AS t ON c.id = t.ConsultorID
-                                                        WHERE DATE(t.StartingDay)=DATE(?) AND c.Type!='0'");
+    $query =                    $connection->prepare("SELECT consultors.Firstname, consultors.Lastname, assignment.Name as aName, l.Mon, l.Tue, l.Wed, l.Thu, l.Fri, l.Sat, l.Sun, l.MonNote, l.TueNote, l.WedNote, l.ThuNote, l.FriNote, l.SatNote, l.SunNote, l.Mon + l.Tue + l.Wed + l.Thu + l.Fri + l.Sat + l.Sun as Suma, l.Submitted
+                                                FROM lineas l
+                                                INNER JOIN consultors ON (l.ConsultorID = consultors.ID)
+                                                INNER JOIN assignment ON (l.AssignmentID = assignment.ID)
+                                                WHERE DATE_ADD(DATE(l.StartingDay), INTERVAL +6 DAY) = DATE(?)
+                                                AND l.ConsultorID='".$_SESSION['consultor']['Type']."'");
     $query ->                   bind_param("s", $feca);
     $feca =                     $_POST['fecha'];
     $query ->                   execute();
-    $query ->                   bind_result($SN, $first, $last);
-    while($query -> fetch()){
-        //echo "$SN $first $last";
-        $array =                    array("ID" => $SN, "First" => $first, "Last" => $last);
-        array_push($output, $array);
+    $resultado =                $query->get_result();
+    if ($resultado->num_rows>0) {
+        while($row = $resultado->fetch_assoc()) {
+            if($row['Submitted'] == 0){
+                $status = 'Submitted';
+            }else if($row['Submitted'] == 1){
+                $status =   'Approved';
+            }
+            $temp =   array("Name" => $row['aName'], "Mon" => $row['Mon'], "Tue" => $row['Tue'], "Wed" => $row['Wed'], "Thu" => $row['Thu'], "Fri" => $row['Fri'], "Sat" => $row['Sat'], "Sun" => $row['Sun'], $row['MonNote'], $row['TueNote'], $row['WedNote'], $row['ThuNote'], $row['FriNote'], $row['SatNote'], $row['SunNote'], $row['Suma'], "Submitted" => $row['Submitted']);
+            array_push($output, $temp);  
+        }
+        echo json_encode($output);
+        $query -> close();
+    }else{
+        echo "No Results Found :(";
     }
-    echo json_encode($output);
 }
 
 if(isset($_POST['finishTimecard'])){
