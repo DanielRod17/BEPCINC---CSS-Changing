@@ -104,8 +104,8 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                     <div id="timecards">
                     <div id="tableInfo">
                         <button style='float: left; height:  30px;' onclick="weekChange('0');"><<</button><input type="text" placeholder="Week Ending" id="datepicker" onchange="actualizarTabla(this);" autocomplete="off" value="<?php echo $Td_u; ?>" ><button  style='float: left; height:  30px;' onclick="weekChange('1');" id="adelante">>></button>
-                        <input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' id='guardar' type='submit' form='timeForms' value='Save'>
-                        <input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' type='submit' form="" onclick="Approve();" disabled id="approve" value="Submit">
+                        <!-- <input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' id='guardar' type='submit' form='timeForms' value='Save'>
+                        <input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' type='submit' form="" onclick="Approve();" disabled id="approve" value="Submit"> -->
                     </div>
                     <table id="timeTable">
                         <thead>
@@ -138,7 +138,7 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                     <td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'></td>
                                     <td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'></td>
                                     <td class='sum'></td>
-                                    <td></td>
+                                    <td class='statusCard'></td>
                                 </tr>";
                             }
                             echo "</form>
@@ -160,12 +160,12 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                 </div>
                     </div>
             <div class="cont-boton">
-                <select id="addLineas" style="float: left; width: 50px; margin-right: 10px; margin-top: 20px;">
+                <!-- <select id="addLineas" style="float: left; width: 50px; margin-right: 10px; margin-top: 20px;">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                 </select>
-                <input type="submit" name="" value="Add another" onclick="AgregarLineas();">
+                <input type="submit" name="" value="Add another" id="addMore" onclick="AgregarLineas();"> -->
                 <input type="button" id="cancel-boton" value="cancel" onclick='Reset();'>
             </div>
             <?php

@@ -40,6 +40,7 @@ $(document).ready(function()
 });
 
 function ActualizarTotales(e){
+    e = e || this;
     var dias =    new Array(0, 0, 0, 0, 0, 0, 0);
     //alert( "jejillo" );
     var total =         0;
@@ -47,7 +48,9 @@ function ActualizarTotales(e){
     $(e).closest('tr').find("input").each(function() {
         //alert(this.value);
         if(i > 0 && i < 9){
-            total = +total + +this.value;
+            if(!isNaN(this.value)){
+                total = +total + +this.value;
+            }
         }
         i++;
     });
@@ -92,42 +95,62 @@ function nuevoTimecard(){
 }
 
 function actualizarTabla(e){
-    var res =               e.value.split("/");
-    var fecha =             res[2] + "-"+ res[0] + "-" + res[1];
-    res[0]--;
-    $.ajax({ //PERFORM AN AJAX CALL
-        type:                   'post',
-        url:                    '../Resources/WebResponses/TimecardsAJAX.php', //PHP CONTAINING ALL THE FUNCTIONS
-        data:                   {fecha: fecha}, //SEND THE VALUE TO EXECUTE A QUERY WITH THE PALLET ID
-        success: function(e) {
-            if(e !== "No Results Found :("){
-                if(JSON.parse(e).length > document.getElementsByClassName('DaysInput').length - 1){
-                    AgregarLineas(JSON.parse(e).length - 5);
+    for(var i = 0; i < document.getElementsByClassName('statusCard').length; i++){
+        document.getElementsByClassName('statusCard')[i].innerHTML = '';
+    }
+    if(e.value != ""){
+        var res =               e.value.split("/");
+        var fecha =             res[2] + "-"+ res[0] + "-" + res[1];
+        res[0]--;
+        $.ajax({ //PERFORM AN AJAX CALL
+            type:                   'post',
+            url:                    '../Resources/WebResponses/TimecardsAJAX.php', //PHP CONTAINING ALL THE FUNCTIONS
+            data:                   {fecha: fecha}, //SEND THE VALUE TO EXECUTE A QUERY WITH THE PALLET ID
+            success: function(e) {
+                if(e !== "No Results Found :("){
+                    cargarCards(JSON.parse(e));
+                }else{
+
+                    var today =             new Date();
+                    var hoy =               today.getTime();
+                    var date =              document.getElementById('datepicker').value;
+                    var ras =               date.split("/");
+                    ras[0]--;
+                    var fechaInicial =      new Date(ras[2], ras[0], ras[1]);
+                    var checar =            fechaInicial.getTime();
+                    var difference_ms =     hoy - checar;
+                    var one_day =           1000*60*60*24;
+                    var diff =              Math.round(difference_ms/one_day);
+                    if(diff > 3 && document.getElementById('approve') && document.getElementById('guardar')){
+                        document.getElementById("guardar").remove();
+                        document.getElementById("approve").remove();
+                        document.getElementById("addLineas").remove();
+                        document.getElementById('addMore').remove();
+                    }
+                    for(var p = document.getElementsByClassName('DaysInput').length; p > 6; p-- ){
+                        document.getElementsByClassName('DaysInput')[p-2].remove();
+                    }
+                    $('#timeTable').find('input[type=number], input[type=text]').each(function(){
+                        $(this).val($(this).attr("data-default"));
+                    });
+
+                    var table =         document.getElementById('timeTable');
+                    var rowLength =     table.rows.length;
+                    for(var i = 0; i < 5; i++){
+                        var row =   table.rows[i+1];
+                        ActualizarTotales(row.cells[3].children[0]);
+                    } 
                 }
-                cargarCards(JSON.parse(e));
-            }else{
-                $('#timeTable').find('input[type=number], input[type=text]').each(function(){
-                    $(this).val($(this).attr("data-default"));
-                });
-                var table =         document.getElementById('timeTable');
-                var rowLength =     table.rows.length;
-                //alert(nambre + " " + fecha);
-                var info =        e;
-                var lineas =      info;
-                for(var i = 0; i < lineas.length; i++){
-                    var row =   table.rows[i+1];
-                    ActualizarTotales(row.cells[3].children[0]);
-                } 
+                var fechaInicial =      new Date(res[2], res[0], res[1]);
+                var days = ['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'];
+                //alert(fechaInicial.toDateString());
+                for (var i = 0; i < 7 ; i++){
+                    var d2 = addDays(fechaInicial, i, '0');
+                    document.getElementById(days[i]).innerHTML = d2.toDateString().substring(0,10);
+                }
             }
-            var fechaInicial =      new Date(res[2], res[0], res[1]);
-            var days = ['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'];
-            //alert(fechaInicial.toDateString());
-            for (var i = 0; i < 7 ; i++){
-                var d2 = addDays(fechaInicial, i, '0');
-                document.getElementById(days[i]).innerHTML = d2.toDateString().substring(0,10);
-            }
-        }
-    });
+        });
+    }
 }
 
 
@@ -184,8 +207,6 @@ function hideProjects(){
     modales.className =             'w3-animate-hide';
 }
 
-
-
 function AssignName(e){
     //alert(e.innerHTML);
     var nombreInput = "project " + row;
@@ -194,7 +215,7 @@ function AssignName(e){
 }
 
 function guardarTimecard(){
-    var banderita =     0;
+    var banderita =     1;
     var table =         document.getElementById('timeTable');
     var rowLength =     table.rows.length;
     var totalProjs =    new Array();
@@ -222,12 +243,11 @@ function guardarTimecard(){
             Names.push(Name);
         }
     }
-    //alert ("Nombres\n" + Names);
-    //alert ("Projects\n" + totalProjs);
+    var fecha =         document.getElementById('datepicker').value;
     $.ajax({ //PERFORM AN AJAX CALL
         type:                   'post',
         url:                    '../Resources/WebResponses/TimecardsAJAX.php', //PHP CONTAINING ALL THE FUNCTIONS
-        data:                   {checkNames: '1', names: Names}, //SEND THE VALUE TO EXECUTE A QUERY WITH THE PALLET ID
+        data:                   {checkNames: '1', names: Names, fechaCheck: fecha}, //SEND THE VALUE TO EXECUTE A QUERY WITH THE PALLET ID
         success: function(data) { //IF THE REQUEST ITS SUCCESSFUL
             if(data === "Alles gut"){
                 $.ajax({ //PERFORM AN AJAX CALL
@@ -240,7 +260,7 @@ function guardarTimecard(){
                         if(data === "Timecard Saved! Leaving the page will delete it"){
                             document.getElementById('approve').disabled =           false;
                             document.getElementById('guardar').disabled =           true;
-                            for(var i = 1; i < rowLength; i++){
+                            for(var i = 1; i < rowLength - 1; i++){
                                 var row = table.rows[i];
                                 if(row.cells[0].children[1].value !== ""){
                                     row.cells[9].innerHTML = 'Saved';
@@ -259,6 +279,7 @@ function guardarTimecard(){
                 });
             }else{
                 DisplayError(data);
+                alert(data);
             }
             /*window.parent.$("body").animate({scrollTop:0}, 'fast');
             if(data == "User Added Successfully"){
@@ -272,7 +293,7 @@ function guardarTimecard(){
 function Reset(){
     var table =         document.getElementById('timeTable');
     var rowLength =     table.rows.length;
-    for(var i = 1; i < rowLength; i++){
+    for(var i = 1; i < rowLength - 1; i++){
         var row = table.rows[i];
         //your code goes here, looping over every row.
         //cells are accessed as easy
@@ -403,36 +424,69 @@ function cargarCards(e){
     //alert(nambre + " " + fecha);
     var info =        e;
     var lineas =      info;
+    if(e.length > document.getElementsByClassName('DaysInput').length - 1){
+        AgregarLineas(e.length - 5);
+    }else if(e.length <= 5 && document.getElementsByClassName('DaysInput').length > 6){
+        for(var p = document.getElementsByClassName('DaysInput').length - 1; p <= 6; p-- ){
+            document.getElementsByClassName('DaysInput')[p-1].remove();
+        }
+    }
     for(var i = 0; i < lineas.length; i++){
-            var row =   table.rows[i+1];
-            if(lineas[i]['Mon'].split(".")[1] === "00"){  Mon = lineas[i]['Mon'].split(".")[0]; }else{ Mon = lineas[i]['Mon']; }
-            if(lineas[i]['Tue'].split(".")[1] === "00"){  Tue = lineas[i]['Tue'].split(".")[0]; }else{ Tue = lineas[i]['Tue']; }
-            if(lineas[i]['Wed'].split(".")[1] === "00"){  Wed = lineas[i]['Wed'].split(".")[0]; }else{ Wed = lineas[i]['Wed']; }
-            if(lineas[i]['Thu'].split(".")[1] === "00"){  Thu = lineas[i]['Thu'].split(".")[0]; }else{ Thu = lineas[i]['Thu']; }
-            if(lineas[i]['Fri'].split(".")[1] === "00"){  Fri = lineas[i]['Fri'].split(".")[0]; }else{ Fri = lineas[i]['Fri']; }
-            if(lineas[i]['Sat'].split(".")[1] === "00"){  Sat = lineas[i]['Sat'].split(".")[0]; }else{ Sat = lineas[i]['Sat']; }
-            if(lineas[i]['Sun'].split(".")[1] === "00"){  Sun = lineas[i]['Sun'].split(".")[0]; }else{ Sun = lineas[i]['Sun']; } 
-            row.cells[0].children[1].value = lineas[i]['Name'];
-            row.cells[1].children[0].value = Mon;
-            row.cells[2].children[0].value = Tue;
-            row.cells[3].children[0].value = Wed;
-            row.cells[4].children[0].value = Thu;
-            row.cells[5].children[0].value = Fri;
-            row.cells[6].children[0].value = Sat;
-            row.cells[7].children[0].value = Sun;
-            if(lineas[i]['Submitted'] == '1'){
-                flag =              1;
-            }
-            //alert(row.cells[3].innerHTML);
-            ActualizarTotales(row.cells[3].children[0]);
-    }  
-    if(flag == '0'){
+        var row =   table.rows[i+1];
+        if(lineas[i]['Mon'].split(".")[1] === "00"){  Mon = lineas[i]['Mon'].split(".")[0]; }else{ Mon = lineas[i]['Mon']; }
+        if(lineas[i]['Tue'].split(".")[1] === "00"){  Tue = lineas[i]['Tue'].split(".")[0]; }else{ Tue = lineas[i]['Tue']; }
+        if(lineas[i]['Wed'].split(".")[1] === "00"){  Wed = lineas[i]['Wed'].split(".")[0]; }else{ Wed = lineas[i]['Wed']; }
+        if(lineas[i]['Thu'].split(".")[1] === "00"){  Thu = lineas[i]['Thu'].split(".")[0]; }else{ Thu = lineas[i]['Thu']; }
+        if(lineas[i]['Fri'].split(".")[1] === "00"){  Fri = lineas[i]['Fri'].split(".")[0]; }else{ Fri = lineas[i]['Fri']; }
+        if(lineas[i]['Sat'].split(".")[1] === "00"){  Sat = lineas[i]['Sat'].split(".")[0]; }else{ Sat = lineas[i]['Sat']; }
+        if(lineas[i]['Sun'].split(".")[1] === "00"){  Sun = lineas[i]['Sun'].split(".")[0]; }else{ Sun = lineas[i]['Sun']; } 
+        row.cells[0].children[1].value = lineas[i]['Name'];
+        row.cells[1].children[0].value = Mon;
+        row.cells[2].children[0].value = Tue;
+        row.cells[3].children[0].value = Wed;
+        row.cells[4].children[0].value = Thu;
+        row.cells[5].children[0].value = Fri;
+        row.cells[6].children[0].value = Sat;
+        row.cells[7].children[0].value = Sun;
+        if(lineas[i]['Submitted'] == '1'){
+            flag =              1;
+        }
+        //alert(row.cells[3].innerHTML);
+        ActualizarTotales(row.cells[3].children[0]);
+    }
+            
+     
+    var today =             new Date();
+    var hoy =               today.getTime();
+    var date =              document.getElementById('datepicker').value;
+    var ras =               date.split("/");
+    ras[0]--;
+    var fechaInicial =      new Date(ras[2], ras[0], ras[1]);
+    var checar =            fechaInicial.getTime();
+    var difference_ms =     hoy - checar;
+    var one_day =           1000*60*60*24;
+    var diff =              Math.round(difference_ms/one_day);
+    
+            
+    if(flag == '0' && !document.getElementById('approve') && !document.getElementById('guardar') && diff <= 3 ){
         var botones = "<input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' id='guardar' type='submit' form='timeForms' value='Save'>" +
-        "<input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' type='submit' form='' onclick='Approve();' disabled id='approve' value='Submit'>";
+        "<input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' type='submit' form='' onclick='Approve();' disabled id='approve' value='Submit'>"
+        ;
         document.getElementById('adelante').insertAdjacentHTML('afterend', botones);
-    }else{
+        
+        botones = "<select id='addLineas' style='float: left; width: 50px; margin-right: 10px; margin-top: 20px;'>" +
+                    "<option value='1'>1</option>" +
+                    "<option value='2'>2</option>" +
+                    "<option value='3'>3</option>" +
+                "</select>" +
+                "<input type='submit' name='' value='Add another' id='addMore' onclick='AgregarLineas();'>";
+        document.getElementById('cancel-boton').insertAdjacentHTML('beforebegin', botones);
+        
+    }else if(flag == '1' || diff > 3){
         document.getElementById("guardar").remove();
         document.getElementById("approve").remove();
+        document.getElementById("addLineas").remove();
+        document.getElementById('addMore').remove();
     }
 }
 
