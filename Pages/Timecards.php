@@ -103,7 +103,7 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                     <hr id='line'>
                     <div id="timecards">
                     <div id="tableInfo">
-                        <button style='float: left; height:  30px;' onclick="weekChange('0');"><<</button><input type="text" placeholder="Week Ending" id="datepicker" onchange="actualizarTabla(this);" autocomplete="off" value="<?php echo $Td_u; ?>" ><button  style='float: left; height:  30px;' onclick="weekChange('1');">>></button>
+                        <button style='float: left; height:  30px;' onclick="weekChange('0');"><<</button><input type="text" placeholder="Week Ending" id="datepicker" onchange="actualizarTabla(this);" autocomplete="off" value="<?php echo $Td_u; ?>" ><button  style='float: left; height:  30px;' onclick="weekChange('1');" id="adelante">>></button>
                         <input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' id='guardar' type='submit' form='timeForms' value='Save'>
                         <input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' type='submit' form="" onclick="Approve();" disabled id="approve" value="Submit">
                     </div>

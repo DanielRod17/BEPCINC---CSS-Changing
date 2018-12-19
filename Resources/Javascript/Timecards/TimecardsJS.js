@@ -399,8 +399,7 @@ function editTimecard(e){
 
 function cargarCards(e){
     var table =         document.getElementById('timeTable');
-    var rowLength =     table.rows.length;
-    var Mon, Tue, Wed, Thu, Fri, Sat, Sun;
+    var Mon, Tue, Wed, Thu, Fri, Sat, Sun, flag = 0;
     //alert(nambre + " " + fecha);
     var info =        e;
     var lineas =      info;
@@ -421,10 +420,20 @@ function cargarCards(e){
             row.cells[5].children[0].value = Fri;
             row.cells[6].children[0].value = Sat;
             row.cells[7].children[0].value = Sun;
-            alert(lineas[i]['Submitted']);
+            if(lineas[i]['Submitted'] == '1'){
+                flag =              1;
+            }
             //alert(row.cells[3].innerHTML);
             ActualizarTotales(row.cells[3].children[0]);
-    }    
+    }  
+    if(flag == '0'){
+        var botones = "<input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' id='guardar' type='submit' form='timeForms' value='Save'>" +
+        "<input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' type='submit' form='' onclick='Approve();' disabled id='approve' value='Submit'>";
+        document.getElementById('adelante').insertAdjacentHTML('afterend', botones);
+    }else{
+        document.getElementById("guardar").remove();
+        document.getElementById("approve").remove();
+    }
 }
 
 
