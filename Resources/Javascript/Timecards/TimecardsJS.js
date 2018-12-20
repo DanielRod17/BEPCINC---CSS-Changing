@@ -94,6 +94,22 @@ function nuevoTimecard(){
     });
 }
 
+function PreviousCard(){
+    $.ajax({ //PERFORM AN AJAX CALL
+        type:                   'post',
+        url:                    '../Resources/WebResponses/TimecardsAJAX.php', //PHP CONTAINING ALL THE FUNCTIONS
+        data:                   {previous: '1'}, //SEND THE VALUE TO EXECUTE A QUERY WITH THE PALLET ID
+        success: function(e) {
+            if(e !== "No Results Found :("){
+                Reset();
+                cargarCards(JSON.parse(e));
+            }else{
+                alert(e);
+            }
+        }
+    });
+}
+
 function actualizarTabla(e){
     for(var i = 0; i < document.getElementsByClassName('statusCard').length; i++){
         document.getElementsByClassName('statusCard')[i].innerHTML = '';
@@ -121,11 +137,14 @@ function actualizarTabla(e){
                     var difference_ms =     hoy - checar;
                     var one_day =           1000*60*60*24;
                     var diff =              Math.round(difference_ms/one_day);
-                    if(diff > 3 && document.getElementById('approve') && document.getElementById('guardar')){
+                    if(diff > 3 && document.getElementById('guardar')){
                         document.getElementById("guardar").remove();
-                        document.getElementById("approve").remove();
+                        if(document.getElementById('approve')){
+                            document.getElementById("approve").remove();
+                        }
                         document.getElementById("addLineas").remove();
                         document.getElementById('addMore').remove();
+                        document.getElementById('previousCard').remove();
                     }
                     for(var p = document.getElementsByClassName('DaysInput').length; p > 6; p-- ){
                         document.getElementsByClassName('DaysInput')[p-2].remove();
@@ -312,8 +331,10 @@ function Reset(){
         row.cells[9].innerHTML = '';
         row.cells[8].innerHTML = '';
     }
-    document.getElementById('approve').disabled =           true;
-    document.getElementById('guardar').disabled =           false;
+    if(document.getElementById('guardar') && document.getElementById('guardar').disabled == true){
+        document.getElementById('approve').disabled =           true;
+        document.getElementById('guardar').disabled =           false;
+    }
 }
 
 function DisplayError(e){
@@ -372,6 +393,7 @@ function weekChange(e){
             var stringas = (primero.getMonth() + 1) + "/" + primero.getDate() + "/" + primero.getFullYear();
             document.getElementById('datepicker').value = stringas;
         }
+        Reset();
         actualizarTabla(document.getElementById('datepicker'));
     }
 }
@@ -418,6 +440,10 @@ function editTimecard(e){
     cargarTimecard(e);
 }
 
+function NotaDia(e){
+    alert("lala");
+}
+
 function cargarCards(e){
     var table =         document.getElementById('timeTable');
     var Mon, Tue, Wed, Thu, Fri, Sat, Sun, flag = 0;
@@ -454,10 +480,9 @@ function cargarCards(e){
         //alert(row.cells[3].innerHTML);
         ActualizarTotales(row.cells[3].children[0]);
     }
-            
-     
     var today =             new Date();
     var hoy =               today.getTime();
+    var day =               today.getDay();
     var date =              document.getElementById('datepicker').value;
     var ras =               date.split("/");
     ras[0]--;
@@ -466,12 +491,13 @@ function cargarCards(e){
     var difference_ms =     hoy - checar;
     var one_day =           1000*60*60*24;
     var diff =              Math.round(difference_ms/one_day);
-    
-            
     if(flag == '0' && !document.getElementById('approve') && !document.getElementById('guardar') && diff <= 3 ){
-        var botones = "<input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' id='guardar' type='submit' form='timeForms' value='Save'>" +
-        "<input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' type='submit' form='' onclick='Approve();' disabled id='approve' value='Submit'>"
-        ;
+        var botones = "<input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' id='guardar' type='submit' form='timeForms' value='Save'>";
+        
+        if(day == 5 || day == 6 ||day == 0){
+            botones = botones + "<input style='float: left; height:  30px; width: 100px; margin-top: 0px; margin-left: 15px;' type='submit' form='' onclick='Approve();' disabled id='approve' value='Submit'>"
+            ;
+        }
         document.getElementById('adelante').insertAdjacentHTML('afterend', botones);
         
         botones = "<select id='addLineas' style='float: left; width: 50px; margin-right: 10px; margin-top: 20px;'>" +
@@ -482,11 +508,18 @@ function cargarCards(e){
                 "<input type='submit' name='' value='Add another' id='addMore' onclick='AgregarLineas();'>";
         document.getElementById('cancel-boton').insertAdjacentHTML('beforebegin', botones);
         
-    }else if(flag == '1' || diff > 3){
+        if(!document.getElementById('previousCard')){
+            botones = "<input type='button' id='previousCard' value='Copy Previous' onclick='PreviousCard();'>";
+            document.getElementById('line').insertAdjacentHTML('beforebegin', botones);
+        }
+    }else if(flag == '1' || diff > 3 && document.getElementById('guardar')){
         document.getElementById("guardar").remove();
-        document.getElementById("approve").remove();
+        if(document.getElementById('approve')){
+            document.getElementById("approve").remove();
+        }
         document.getElementById("addLineas").remove();
         document.getElementById('addMore').remove();
+        document.getElementById('previousCard').remove();
     }
 }
 

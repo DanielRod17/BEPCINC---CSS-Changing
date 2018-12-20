@@ -213,6 +213,36 @@ if(isset($_POST['fecha'])){
     }
 }
 
+if(isset($_POST['previous'])){
+    $output =                   array();
+    $lStartingDay =             date('Y-m-d', strtotime('last Sunday', strtotime(date("m/d/Y"))));
+    $query =                    $connection->prepare("SELECT consultors.Firstname, consultors.Lastname, assignment.Name as aName, l.Mon, l.Tue, l.Wed, l.Thu, l.Fri, l.Sat, l.Sun, l.MonNote, l.TueNote, l.WedNote, l.ThuNote, l.FriNote, l.SatNote, l.SunNote, l.Mon + l.Tue + l.Wed + l.Thu + l.Fri + l.Sat + l.Sun as Suma, l.Submitted
+                                                FROM lineas l
+                                                INNER JOIN consultors ON (l.ConsultorID = consultors.ID)
+                                                INNER JOIN assignment ON (l.AssignmentID = assignment.ID)
+                                                WHERE DATE_ADD(DATE(l.StartingDay), INTERVAL +6 DAY) = DATE(?)
+                                                AND l.ConsultorID='".$_SESSION['consultor']['Type']."'");
+    $query ->                   bind_param("s", $feca);
+    $feca =                     $lStartingDay;
+    $query ->                   execute();
+    $resultado =                $query->get_result();
+    if ($resultado->num_rows>0) {
+        while($row = $resultado->fetch_assoc()) {
+            if($row['Submitted'] == 0){
+                $status = 'Submitted';
+            }else if($row['Submitted'] == 1){
+                $status =   'Approved';
+            }
+            $temp =   array("Name" => $row['aName'], "Mon" => $row['Mon'], "Tue" => $row['Tue'], "Wed" => $row['Wed'], "Thu" => $row['Thu'], "Fri" => $row['Fri'], "Sat" => $row['Sat'], "Sun" => $row['Sun'], $row['MonNote'], $row['TueNote'], $row['WedNote'], $row['ThuNote'], $row['FriNote'], $row['SatNote'], $row['SunNote'], $row['Suma'], "Submitted" => $row['Submitted']);
+            array_push($output, $temp);  
+        }
+        echo json_encode($output);
+        $query -> close();
+    }else{
+        echo "No Results Found :(";
+    }
+}
+
 if(isset($_POST['finishTimecard'])){
     $cadenaUpd =        "";
     $queryLines =       $connection->query("SELECT ID FROM lineas WHERE ConsultorID='".$_SESSION['consultor']['ID']."' AND Submitted='0'");

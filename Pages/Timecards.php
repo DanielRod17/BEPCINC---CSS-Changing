@@ -100,6 +100,8 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                 <div class="contenedor">
                     <h2>NEW TIMECARD</h2>
                     <?php echo $_SESSION['consultor']['FirstName']." ".$_SESSION['consultor']['LastName']." - ".$_SESSION['consultor']['Title'];  ?>
+                    
+                    <!-- <input type="button" id="previousCard" value="Copy Previous" onclick='PreviousCard();'> -->
                     <hr id='line'>
                     <div id="timecards">
                     <div id="tableInfo">
@@ -130,7 +132,7 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                     <td class='updateProj'>
                                         <i class='icon fas fa-search' onclick=\"DisplayProjects('$i');\" ></i>
                                         <input type='text' placeholder='Select Assigment' class='project $i'></td>
-                                    <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
+                                    <td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'></td>
                                     <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
                                     <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
                                     <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>

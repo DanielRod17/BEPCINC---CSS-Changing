@@ -206,6 +206,22 @@ body, html{
     width:                            180px;
     transition:                       all 0.3s ease-in-out;
 }
+.sidebar-contact input[value="Copy Previous"] {
+    background:                       #fff;
+    color:                            #35424a;
+    text-align:                       center;
+    border:                           #BDBDBD 1px solid;
+    cursor:                           pointer;
+    font-family:                      bebasneue-light;
+    letter-spacing:                   2px;
+    font-size:                        15px;
+    font-weight:                      600;
+    border-radius:                    5px;
+    margin-top:                       15px;
+    float:                            right;
+    width:                            180px;
+    transition:                       all 0.3s ease-in-out;
+}
 .sidebar-contact h1,h5{
   text-align:                       right;
   font-family:                      bebasneue-light;
