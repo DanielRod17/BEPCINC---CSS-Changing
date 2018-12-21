@@ -132,13 +132,13 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                     <td class='updateProj'>
                                         <i class='icon fas fa-search' onclick=\"DisplayProjects('$i');\" ></i>
                                         <input type='text' placeholder='Select Assigment' class='project $i'></td>
-                                    <td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'></td>
-                                    <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
-                                    <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
-                                    <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
-                                    <td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>
-                                    <td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'></td>
-                                    <td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'></td>
+                                    <td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class='hourDay' min='0' max='24'><div class='noteDay'>Monday Notes <textarea class='notaDesc'></textarea></div></td>
+                                    <td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'><div class='noteDay'>Tuesday Notes <textarea class='notaDesc'></textarea></div></td>
+                                    <td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'><div class='noteDay'>Wednesday Notes <textarea class='notaDesc'></textarea></div></td>
+                                    <td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'><div class='noteDay'>Thursday Notes <textarea class='notaDesc'></textarea></div></td>
+                                    <td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'><div class='noteDay'>Friday Notes <textarea class='notaDesc'></textarea></div></td>
+                                    <td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'><div class='noteDay'>Staurday Notes <textarea class='notaDesc'></textarea></div></td>
+                                    <td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'><div class='noteDay'>Sunday Notes <textarea class='notaDesc'></textarea></div></td>
                                     <td class='sum'></td>
                                     <td class='statusCard'></td>
                                 </tr>";

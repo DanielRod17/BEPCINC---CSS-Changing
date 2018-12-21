@@ -4,6 +4,23 @@
  * and open the template in the editor.
  */
 
+
+var popElement = document.getElementsByClassName("noteDay");
+var text =       document.getElementsByClassName("notaDesc");
+document.addEventListener('click', function(event) {
+    for(i=0; i < popElement.length; i++){
+        popEl = popElement[i];
+        var isClickInside = popEl.contains(event.target);
+        event.stopPropagation();
+        if (!isClickInside && event.target.className != 'notaDesc') {
+            for(var i = 0; i < popElement.length; i++){
+                popElement[i].style.display =   'none';
+            }
+            break;
+        }
+    }
+});
+
 var row = "";
 $(document).ready(function()
 {
@@ -172,7 +189,6 @@ function actualizarTabla(e){
     }
 }
 
-
 function addDays(date, amount, type) {
     var tzOff = date.getTimezoneOffset() * 60 * 1000,
     t = date.getTime(),
@@ -255,9 +271,16 @@ function guardarTimecard(){
         var Fri =   row.cells[5].children[0].value;
         var Sat =   row.cells[6].children[0].value;
         var Sun =   row.cells[7].children[0].value;
+        var MonN =  row.cells[1].children[1].children[0].value;
+        var TueN =  row.cells[2].children[1].children[0].value;
+        var WedN =  row.cells[3].children[1].children[0].value;
+        var ThuN =  row.cells[4].children[1].children[0].value;
+        var FriN =  row.cells[5].children[1].children[0].value;
+        var SatN =  row.cells[6].children[1].children[0].value;
+        var SunN =  row.cells[7].children[1].children[0].value;
         ;
         if(Name !== ""){
-            var info = new Array(Name, Mon, Tue, Wed, Thu, Fri, Sat, Sun);
+            var info = new Array(Name, Mon, Tue, Wed, Thu, Fri, Sat, Sun, MonN, TueN, WedN, ThuN, FriN, SatN, SunN);
             totalProjs.push(info);
             Names.push(Name);
         }
@@ -289,21 +312,13 @@ function guardarTimecard(){
                             if(r)
                                 r.remove();
                             document.getElementById('boton').insertAdjacentHTML('afterend', "<span id='deleteP'>You have saved timecards, reload the page</span>");
-                        }
-                        /*window.parent.$("body").animate({scrollTop:0}, 'fast');
-                        if(data == "User Added Successfully"){
-                            //document.getElementById('newCustomer').reset();
-                        }*/
+                        }///////////////////////*/
                     }
                 });
             }else{
                 DisplayError(data);
                 alert(data);
             }
-            /*window.parent.$("body").animate({scrollTop:0}, 'fast');
-            if(data == "User Added Successfully"){
-                //document.getElementById('newCustomer').reset();
-            }*/
         }
     });
     return false;
@@ -330,6 +345,9 @@ function Reset(){
         row.cells[7].children[0].value = "";
         row.cells[9].innerHTML = '';
         row.cells[8].innerHTML = '';
+    }
+    for(var i = 0; i < document.getElementsByClassName('notaDesc').length; i++){
+        document.getElementsByClassName('notaDesc')[i].value = "";
     }
     if(document.getElementById('guardar') && document.getElementById('guardar').disabled == true){
         document.getElementById('approve').disabled =           true;
@@ -415,7 +433,6 @@ function viewTimecard(e){
     alert("lalalalla");
 }
 
-
 function Displayear(e){
     var displays =                  document.getElementsByClassName("cont");
     var warning =                   document.getElementById('advertenquia');
@@ -441,7 +458,8 @@ function editTimecard(e){
 }
 
 function NotaDia(e){
-    alert("lala");
+    e.parentNode.childNodes[1].style.display = 'block';
+    e.parentNode.childNodes[1].childNodes[1].focus();
 }
 
 function cargarCards(e){
@@ -453,8 +471,8 @@ function cargarCards(e){
     if(e.length > document.getElementsByClassName('DaysInput').length - 1){
         AgregarLineas(e.length - 5);
     }else if(e.length <= 5 && document.getElementsByClassName('DaysInput').length > 6){
-        for(var p = document.getElementsByClassName('DaysInput').length - 1; p <= 6; p-- ){
-            document.getElementsByClassName('DaysInput')[p-1].remove();
+        for(var p = document.getElementsByClassName('DaysInput').length; p > 6; p-- ){
+            document.getElementsByClassName('DaysInput')[p-2].remove();
         }
     }
     for(var i = 0; i < lineas.length; i++){
@@ -474,6 +492,14 @@ function cargarCards(e){
         row.cells[5].children[0].value = Fri;
         row.cells[6].children[0].value = Sat;
         row.cells[7].children[0].value = Sun;
+        ///////////////////
+        row.cells[1].children[1].children[0].value = lineas[i]['MonNote'];
+        row.cells[2].children[1].children[0].value = lineas[i]['TueNote'];
+        row.cells[3].children[1].children[0].value = lineas[i]['WedNote'];
+        row.cells[4].children[1].children[0].value = lineas[i]['ThuNote'];
+        row.cells[5].children[1].children[0].value = lineas[i]['FriNote'];
+        row.cells[6].children[1].children[0].value = lineas[i]['SatNote'];
+        row.cells[7].children[1].children[0].value = lineas[i]['SunNote'];
         if(lineas[i]['Submitted'] == '1'){
             flag =              1;
         }
@@ -522,7 +548,6 @@ function cargarCards(e){
         document.getElementById('previousCard').remove();
     }
 }
-
 
 function cargarTimecard(e){
     var table =         document.getElementById('timeTable');
@@ -650,13 +675,13 @@ function AgregarLineas(e){
                 "<td class='updateProj'>" +
                 "<i class='icon fas fa-search' onclick=\"DisplayProjects('"+claseIndex+"');\" ></i>" +
                 "<input type='text' placeholder='Select Assigment' class='project "+claseIndex+" ui-autocomplete-input' autocomplete='off'></td>" +
-                "<td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>" +
-                "<td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>" +
-                "<td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>" +
-                "<td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>" +
-                "<td class='updateDay'><input type='number' step='0.01' class ='hourDay' min='0' max='24'></td>" +
-                "<td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'></td>" +
-                "<td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'></td>" +
+                "<td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'><div class='noteDay'>Monday Notes <textarea class='notaDesc'></textarea></div></td>" +
+                "<td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'><div class='noteDay'>Tuesday Notes <textarea class='notaDesc'></textarea></div></td>" +
+                "<td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'><div class='noteDay'>Wednesday Notes <textarea class='notaDesc'></textarea></div></td>" +
+                "<td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'><div class='noteDay'>Thursday Notes <textarea class='notaDesc'></textarea></div></td>" +
+                "<td class='updateDay'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24'><div class='noteDay'>Friday Notes <textarea class='notaDesc'></textarea></div></td>" +
+                "<td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'><div class='noteDay'>Saturday Notes <textarea class='notaDesc'></textarea></div></td>" +
+                "<td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'><div class='noteDay'>Sunday Notes <textarea class='notaDesc'></textarea></div></td>" +
                 "<td class='sum'></td>" +
                 "<td></td>" +
             "</tr>";

@@ -101,13 +101,11 @@ if(isset($_POST['insertar'])){
     $_SESSION['cardsSubmit'] =  null;
     $cardsSubmit =              array();
     if(isset($_SESSION['fecha'])){
-        $lineas =            $_POST['lineas'];
-        //if($_POST['delete']){
-            $queryDel =           $connection->query("DELETE FROM lineas
-                                                    WHERE DATE_ADD(DATE(lineas.StartingDay), INTERVAL +6 DAY) = DATE('".$_SESSION['fecha']."')
-                                                    AND ConsultorID=".$_SESSION['consultor']['ID']."
-                                                    ");
-        //}
+        $lineas =           $_POST['lineas'];
+        $queryDel =         $connection->query("DELETE FROM lineas
+                                                WHERE DATE_ADD(DATE(lineas.StartingDay), INTERVAL +6 DAY) = DATE('".$_SESSION['fecha']."')
+                                                AND ConsultorID=".$_SESSION['consultor']['ID']."
+                                                ");
         $matrix;
         $counterLinea = 1;
         $arreglo =      array();
@@ -144,8 +142,8 @@ if(isset($_POST['insertar'])){
                 $queryR =           $query->fetch_object();
                 $AsI =              $queryR->ID;
                 $Co =               $_SESSION['consultor']['ID'];
-                $insertar =         $connection->prepare("INSERT INTO lineas (ID, AssignmentID, ConsultorID, TimecardID, Mon, Tue, Wed, Thu, Fri, Sat, Sun, Submitted, StartingDay, CreatedDate, Dailycount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $insertar ->        bind_param('iiisiiiiiiiissi', $I, $A, $C, $T, $Mo, $Tu, $We, $Th, $Fr, $Sa, $Su, $Submtted, $SD, $CD, $Da);
+                $insertar =         $connection->prepare("INSERT INTO lineas (ID, AssignmentID, ConsultorID, TimecardID, Mon, Tue, Wed, Thu, Fri, Sat, Sun, Submitted, StartingDay, CreatedDate, Dailycount, MonNote, TueNote, WedNote, ThuNote, FriNote, SatNote, SunNote) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $insertar ->        bind_param('iiisiiiiiiiississsssss', $I, $A, $C, $T, $Mo, $Tu, $We, $Th, $Fr, $Sa, $Su, $Submtted, $SD, $CD, $Da, $MonN, $TueN, $WedN, $ThuN, $FriN, $SatN, $SunN);
                 $I =                $ID;
                 $cardsSubmit[] =    $I;
                 $A =                $AsI;
@@ -160,6 +158,13 @@ if(isset($_POST['insertar'])){
                 $Fr =               $linea[5];
                 $Sa =               $linea[6];
                 $Su =               $linea[7];
+                $MonN =             $linea[8];
+                $TueN =             $linea[9];
+                $WedN =             $linea[10];
+                $ThuN =             $linea[11];
+                $FriN =             $linea[12];
+                $SatN =             $linea[13];
+                $SunN =             $linea[14];
                 $SD =               $_SESSION['fechaSearch'];
                 $SD =               strtotime("$SD -6 days");
                 $SD =               date("Y-m-d", $SD);
@@ -186,7 +191,7 @@ if(isset($_POST['fecha'])){
     $output =                   array();
     $_SESSION['fecha'] =        $_POST['fecha'];
     $_SESSION['fechaSearch'] =  $_POST['fecha'];
-    $query =                    $connection->prepare("SELECT consultors.Firstname, consultors.Lastname, assignment.Name as aName, l.Mon, l.Tue, l.Wed, l.Thu, l.Fri, l.Sat, l.Sun, l.MonNote, l.TueNote, l.WedNote, l.ThuNote, l.FriNote, l.SatNote, l.SunNote, l.Mon + l.Tue + l.Wed + l.Thu + l.Fri + l.Sat + l.Sun as Suma, l.Submitted
+    $query =                    $connection->prepare("SELECT consultors.Firstname, consultors.Lastname, assignment.Name as aName, l.Mon, l.Tue, l.Wed, l.Thu, l.Fri, l.Sat, l.Sun, l.MonNote, l.TueNote, l.WedNote, l.ThuNote, l.FriNote, l.SatNote, l.SunNote, l.Mon + l.Tue + l.Wed + l.Thu + l.Fri + l.Sat + l.Sun as Suma, l.Submitted, l.MonNote, l.TueNote, l.WedNote, l.ThuNote, l.FriNote, l.SatNote, l.SunNote
                                                 FROM lineas l
                                                 INNER JOIN consultors ON (l.ConsultorID = consultors.ID)
                                                 INNER JOIN assignment ON (l.AssignmentID = assignment.ID)
@@ -203,7 +208,7 @@ if(isset($_POST['fecha'])){
             }else if($row['Submitted'] == 1){
                 $status =   'Approved';
             }
-            $temp =   array("Name" => $row['aName'], "Mon" => $row['Mon'], "Tue" => $row['Tue'], "Wed" => $row['Wed'], "Thu" => $row['Thu'], "Fri" => $row['Fri'], "Sat" => $row['Sat'], "Sun" => $row['Sun'], $row['MonNote'], $row['TueNote'], $row['WedNote'], $row['ThuNote'], $row['FriNote'], $row['SatNote'], $row['SunNote'], $row['Suma'], "Submitted" => $row['Submitted']);
+            $temp =   array("Name" => $row['aName'], "Mon" => $row['Mon'], "Tue" => $row['Tue'], "Wed" => $row['Wed'], "Thu" => $row['Thu'], "Fri" => $row['Fri'], "Sat" => $row['Sat'], "Sun" => $row['Sun'], $row['MonNote'], $row['TueNote'], $row['WedNote'], $row['ThuNote'], $row['FriNote'], $row['SatNote'], $row['SunNote'], $row['Suma'], "Submitted" => $row['Submitted'], "MonNote" => $row['MonNote'], "TueNote" => $row['TueNote'], "WedNote" => $row['WedNote'], "ThuNote" => $row['ThuNote'], "FriNote" => $row['FriNote'], "SatNote" => $row['SatNote'], "SunNote" => $row['SunNote']);
             array_push($output, $temp);  
         }
         echo json_encode($output);
@@ -295,7 +300,6 @@ if(isset($_POST['nombreSearch'])){
     }
     echo json_encode($result);
 }
-
 
 if(isset($_POST['actualizar'])){
     $res =              array();
