@@ -208,7 +208,7 @@ if(isset($_POST['fecha'])){
             }else if($row['Submitted'] == 1){
                 $status =   'Approved';
             }
-            $temp =   array("Name" => $row['aName'], "Mon" => $row['Mon'], "Tue" => $row['Tue'], "Wed" => $row['Wed'], "Thu" => $row['Thu'], "Fri" => $row['Fri'], "Sat" => $row['Sat'], "Sun" => $row['Sun'], $row['MonNote'], $row['TueNote'], $row['WedNote'], $row['ThuNote'], $row['FriNote'], $row['SatNote'], $row['SunNote'], $row['Suma'], "Submitted" => $row['Submitted'], "MonNote" => $row['MonNote'], "TueNote" => $row['TueNote'], "WedNote" => $row['WedNote'], "ThuNote" => $row['ThuNote'], "FriNote" => $row['FriNote'], "SatNote" => $row['SatNote'], "SunNote" => $row['SunNote']);
+            $temp =   array("Name" => $row['aName'], "Mon" => $row['Mon'], "Tue" => $row['Tue'], "Wed" => $row['Wed'], "Thu" => $row['Thu'], "Fri" => $row['Fri'], "Sat" => $row['Sat'], "Sun" => $row['Sun'], "MonNote" => $row['MonNote'], "TueNote" => $row['TueNote'], "WedNote" => $row['WedNote'], "ThuNote" => $row['ThuNote'], "FriNote" => $row['FriNote'], "SatNote" => $row['SatNote'], "SunNote" => $row['SunNote'], $row['Suma'], "Submitted" => $row['Submitted']);
             array_push($output, $temp);  
         }
         echo json_encode($output);
@@ -238,7 +238,7 @@ if(isset($_POST['previous'])){
             }else if($row['Submitted'] == 1){
                 $status =   'Approved';
             }
-            $temp =   array("Name" => $row['aName'], "Mon" => $row['Mon'], "Tue" => $row['Tue'], "Wed" => $row['Wed'], "Thu" => $row['Thu'], "Fri" => $row['Fri'], "Sat" => $row['Sat'], "Sun" => $row['Sun'], $row['MonNote'], $row['TueNote'], $row['WedNote'], $row['ThuNote'], $row['FriNote'], $row['SatNote'], $row['SunNote'], $row['Suma'], "Submitted" => $row['Submitted']);
+            $temp =   array("Name" => $row['aName'], "Mon" => $row['Mon'], "Tue" => $row['Tue'], "Wed" => $row['Wed'], "Thu" => $row['Thu'], "Fri" => $row['Fri'], "Sat" => $row['Sat'], "Sun" => $row['Sun'], "MonNote" => $row['MonNote'], "TueNote" => $row['TueNote'], "WedNote" => $row['WedNote'], "ThuNote" => $row['ThuNote'], "FriNote" => $row['FriNote'], "SatNote" => $row['SatNote'], "SunNote" => $row['SunNote'], $row['Suma'], "Submitted" => $row['Submitted']);
             array_push($output, $temp);  
         }
         echo json_encode($output);
