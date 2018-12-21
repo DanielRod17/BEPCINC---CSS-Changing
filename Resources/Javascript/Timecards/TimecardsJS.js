@@ -6,20 +6,45 @@
 
 
 var popElement = document.getElementsByClassName("noteDay");
-var text =       document.getElementsByClassName("notaDesc");
+var popWeek =    document.getElementsByClassName("noteWeek");
 document.addEventListener('click', function(event) {
-    for(i=0; i < popElement.length; i++){
-        popEl = popElement[i];
-        var isClickInside = popEl.contains(event.target);
-        event.stopPropagation();
-        if (!isClickInside && event.target.className != 'notaDesc') {
-            for(var i = 0; i < popElement.length; i++){
-                popElement[i].style.display =   'none';
-            }
-            break;
+    if (event.target.className != 'noteDay' && event.target.className != 'notaDesc' && event.target.className == 'noteWeek') {
+        for(var i = 0; i < popElement.length; i++){
+            popElement[i].style.display =   'none';
+        }
+    }
+    if(event.target.className == 'noteDay' && event.target.className == 'notaDesc' && event.target.className != 'noteWeek'){
+        for(var i = 0; i < popWeek.length; i++){
+            popWeek[i].style.display =   'none';
+        }
+    }
+    if(event.target.className != 'noteDay' && event.target.className != 'notaDesc' && event.target.className != 'noteWeek'){
+        for(var i = 0; i < popElement.length; i++){
+            popElement[i].style.display =   'none';
+        }for(var i = 0; i < popWeek.length; i++){
+            popWeek[i].style.display =   'none';
         }
     }
 });
+
+
+document.body.addEventListener( 'change', function ( event ) {
+    if( event.srcElement.className == 'notaDesc' ) {
+        AgregarNotaSemanal(event.srcElement);
+    };
+});
+
+function AgregarNotaSemanal(elemento){
+    setTimeout(function(){
+        for(j = 0; j < document.getElementsByClassName('noteWeek').length ; j++){
+            for(p = 0; p < 7; p++){
+                document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaSemana')[p].innerHTML = document.getElementsByClassName('updateDay')[p].innerHTML;
+                document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaNote')[p].innerHTML =   document.getElementsByClassName('DaysInput')[j].getElementsByClassName('notaDesc')[p].value;  
+            }
+            //alert(document.getElementsByClassName('DaysInput')[j + 1].getElementsByClassName('notaDesc')[0].value);//getElementsByClassName('notaDesc')[p]);
+        }
+    }, 100);
+}
 
 var row = "";
 $(document).ready(function()
@@ -125,6 +150,15 @@ function PreviousCard(){
             }
         }
     });
+    setTimeout(function(){
+        for(j = 0; j < document.getElementsByClassName('noteWeek').length ; j++){
+            for(p = 0; p < 7; p++){
+                document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaSemana')[p].innerHTML = document.getElementsByClassName('updateDay')[p].innerHTML;
+                document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaNote')[p].innerHTML =   document.getElementsByClassName('DaysInput')[j].getElementsByClassName('notaDesc')[p].value;  
+            }
+            //alert(document.getElementsByClassName('DaysInput')[j + 1].getElementsByClassName('notaDesc')[0].value);//getElementsByClassName('notaDesc')[p]);
+        }
+    }, 100);
 }
 
 function actualizarTabla(e){
@@ -186,6 +220,15 @@ function actualizarTabla(e){
                 }
             }
         });
+        setTimeout(function(){
+            for(j = 0; j < document.getElementsByClassName('noteWeek').length ; j++){
+                for(p = 0; p < 7; p++){
+                    document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaSemana')[p].innerHTML = document.getElementsByClassName('updateDay')[p].innerHTML;
+                    document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaNote')[p].innerHTML =   document.getElementsByClassName('DaysInput')[j].getElementsByClassName('notaDesc')[p].value;  
+                }
+                //alert(document.getElementsByClassName('DaysInput')[j + 1].getElementsByClassName('notaDesc')[0].value);//getElementsByClassName('notaDesc')[p]);
+            }
+        }, 100);
     }
 }
 
@@ -460,6 +503,21 @@ function editTimecard(e){
 function NotaDia(e){
     e.parentNode.childNodes[1].style.display = 'block';
     e.parentNode.childNodes[1].childNodes[1].focus();
+    for(var i = 0; i < popWeek.length; i++){
+        popWeek[i].style.display =   'none';
+    }
+}
+
+function NotaSemana(e){
+    for(var i = 0; i < popWeek.length; i++){
+        popWeek[i].style.display =   'none';
+    }
+    for(var i = 0; i < popElement.length; i++){
+        popElement[i].style.display =   'none';
+    }
+    setTimeout(function(){
+        e.childNodes[1].style.display = 'block';
+    }, 100);
 }
 
 function cargarCards(e){
@@ -683,13 +741,32 @@ function AgregarLineas(e){
                 "<td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'><div class='noteDay'>Saturday Notes <textarea class='notaDesc'></textarea></div></td>" +
                 "<td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'><div class='noteDay'>Sunday Notes <textarea class='notaDesc'></textarea></div></td>" +
                 "<td class='sum'></td>" +
-                "<td></td>" +
+                "<td class='statusCard'></td>" +
+                "<td class='weekNotes' onclick='NotaSemana(this);'><i class='far fa-file'></i><div class='noteWeek'>Week Notes" +
+                "<div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>" +
+                "<div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>" +
+                "<div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>" +
+                "<div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>" +
+                "<div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>" +
+                "<div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>" +
+                "<div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>" +
+                "</div></td>" +
             "</tr>";
         claseIndex++;
     }
     //alert(elements[elements.length - 1].innerHTML);
     elements[elements.length - 2].insertAdjacentHTML('afterend', cadena);
+    
     RefreshSomeEventListener();
+    setTimeout(function(){
+        for(j = 0; j < document.getElementsByClassName('noteWeek').length; j++){
+            for(p = 0; p < 7; p++){
+                document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaSemana')[p].innerHTML = document.getElementsByClassName('updateDay')[p].innerHTML;
+                document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaNote')[p].innerHTML =   document.getElementsByClassName('DaysInput')[j].getElementsByClassName('notaDesc')[p].value;  
+            }
+            //alert(document.getElementsByClassName('DaysInput')[j + 1].getElementsByClassName('notaDesc')[0].value);//getElementsByClassName('notaDesc')[p]);
+        }
+    }, 100);
 }
 
 function RefreshSomeEventListener() {

@@ -122,6 +122,7 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                 <th class="updateDay" id='Sun'>Sun</th>
                                 <th>Sum</th>
                                 <th>Status</th>
+                                <th>Notes</th>
                             </tr>
                         </thead>
                         <?php
@@ -141,6 +142,15 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                     <td class='updateDay' style='background-color: rgb(220, 220, 220);'><input type='number' ondblclick='NotaDia(this);' step='0.01' class ='hourDay' min='0' max='24' style='background-color: rgb(220, 220, 220);'><div class='noteDay'>Sunday Notes <textarea class='notaDesc'></textarea></div></td>
                                     <td class='sum'></td>
                                     <td class='statusCard'></td>
+                                    <td class='weekNotes' onclick='NotaSemana(this);'><i class='far fa-file'></i><div class='noteWeek'>Week Notes
+                                    <div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>
+                                    <div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>
+                                    <div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>
+                                    <div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>
+                                    <div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>
+                                    <div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>
+                                    <div class='weekNoteDay'><div class='diaSemana'></div><div class='diaNote'></div></div>
+                                    </div></td>
                                 </tr>";
                             }
                             echo "</form>
@@ -156,6 +166,7 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                     <td class='updateDay' style='background-color: rgb(220, 220, 220);'>0</td>
                                     <td class='sum' id='totalSum'>0</td>
                                     <td></td>
+                                    <td class='weekNotes'></td>
                                 </tr>";
                         ?>
                     </table>
