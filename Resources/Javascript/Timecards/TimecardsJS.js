@@ -34,7 +34,7 @@ document.body.addEventListener( 'change', function ( event ) {
     };
 });
 
-function AgregarNotaSemanal(elemento){
+function AgregarNotaSemanal(){
     setTimeout(function(){
         for(j = 0; j < document.getElementsByClassName('noteWeek').length ; j++){
             for(p = 0; p < 7; p++){
@@ -148,17 +148,9 @@ function PreviousCard(){
             }else{
                 alert(e);
             }
+            AgregarNotaSemanal();
         }
     });
-    setTimeout(function(){
-        for(j = 0; j < document.getElementsByClassName('noteWeek').length ; j++){
-            for(p = 0; p < 7; p++){
-                document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaSemana')[p].innerHTML = document.getElementsByClassName('updateDay')[p].innerHTML;
-                document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaNote')[p].innerHTML =   document.getElementsByClassName('DaysInput')[j].getElementsByClassName('notaDesc')[p].value;  
-            }
-            //alert(document.getElementsByClassName('DaysInput')[j + 1].getElementsByClassName('notaDesc')[0].value);//getElementsByClassName('notaDesc')[p]);
-        }
-    }, 100);
 }
 
 function actualizarTabla(e){
@@ -218,17 +210,9 @@ function actualizarTabla(e){
                     var d2 = addDays(fechaInicial, i, '0');
                     document.getElementById(days[i]).innerHTML = d2.toDateString().substring(0,10);
                 }
+                AgregarNotaSemanal();
             }
         });
-        setTimeout(function(){
-            for(j = 0; j < document.getElementsByClassName('noteWeek').length ; j++){
-                for(p = 0; p < 7; p++){
-                    document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaSemana')[p].innerHTML = document.getElementsByClassName('updateDay')[p].innerHTML;
-                    document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaNote')[p].innerHTML =   document.getElementsByClassName('DaysInput')[j].getElementsByClassName('notaDesc')[p].value;  
-                }
-                //alert(document.getElementsByClassName('DaysInput')[j + 1].getElementsByClassName('notaDesc')[0].value);//getElementsByClassName('notaDesc')[p]);
-            }
-        }, 100);
     }
 }
 
@@ -758,15 +742,7 @@ function AgregarLineas(e){
     elements[elements.length - 2].insertAdjacentHTML('afterend', cadena);
     
     RefreshSomeEventListener();
-    setTimeout(function(){
-        for(j = 0; j < document.getElementsByClassName('noteWeek').length; j++){
-            for(p = 0; p < 7; p++){
-                document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaSemana')[p].innerHTML = document.getElementsByClassName('updateDay')[p].innerHTML;
-                document.getElementsByClassName('noteWeek')[j].getElementsByClassName('diaNote')[p].innerHTML =   document.getElementsByClassName('DaysInput')[j].getElementsByClassName('notaDesc')[p].value;  
-            }
-            //alert(document.getElementsByClassName('DaysInput')[j + 1].getElementsByClassName('notaDesc')[0].value);//getElementsByClassName('notaDesc')[p]);
-        }
-    }, 100);
+    AgregarNotaSemanal();
 }
 
 function RefreshSomeEventListener() {

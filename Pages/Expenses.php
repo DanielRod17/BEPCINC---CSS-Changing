@@ -143,8 +143,8 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                                                 INNER JOIN project ON (assignment.ProjectID = project.ID)
                                                                 INNER JOIN consultors ON (consultors.ID = t.ConsultorID)
                                                                 INNER JOIN expenses ON (expenses.TravelID = t.ID)
-                                                                GROUP BY t.ID
-                                                                WHERE t.ConsultorID =".$_SESSION['consultor']['Type']."");
+                                                                WHERE t.ConsultorID =".$_SESSION['consultor']['Type']."
+                                                                GROUP BY t.ID");
                     }
                     else{
                         $query =            $connection->query("SELECT t.*, project.Name as pName, consultors.Firstname, consultors.Lastname, COUNT(expenses.ID) AS expQty
