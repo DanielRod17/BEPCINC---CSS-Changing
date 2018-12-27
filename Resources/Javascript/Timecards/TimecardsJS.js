@@ -169,7 +169,6 @@ function actualizarTabla(e){
                 if(e !== "No Results Found :("){
                     cargarCards(JSON.parse(e));
                 }else{
-
                     var today =             new Date();
                     var hoy =               today.getTime();
                     var date =              document.getElementById('datepicker').value;
@@ -204,7 +203,28 @@ function actualizarTabla(e){
                     } 
                 }
                 var fechaInicial =      new Date(res[2], res[0], res[1]);
+                var mes =               res[0] + 1;
+                var holiDays =          res[2] + "-" + mes + "-" + res[1];
                 var days = ['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'];
+                $.ajax({
+                    type:       'post',
+                    url:        '../Resources/WebResponses/TimecardsAJAX.php',
+                    data:       {holidaysFecha: holiDays},
+                    success : function (e){
+                        var holiDayColl =   JSON.parse(e);
+                        var table =         document.getElementById('timeTable');
+                        var rowLength =     table.rows.length;
+                        for(var j = 0; j < holiDayColl.length; j++){
+                            for(var i = 0; i < rowLength ; i++){
+                                var row = table.rows[i];
+                                row.cells[holiDayColl[j]].style.backgroundColor = "rgb(191, 222, 239)";
+                                if(i < rowLength - 1 && i > 0){
+                                    row.cells[holiDayColl[j]].children[0].style.backgroundColor = "rgb(191, 222, 239)";
+                                }
+                            }
+                        }
+                    }
+                });
                 //alert(fechaInicial.toDateString());
                 for (var i = 0; i < 7 ; i++){
                     var d2 = addDays(fechaInicial, i, '0');
@@ -415,7 +435,6 @@ function Approve(){
 function weekChange(e){
     var primero =   "";
     var date =      document.getElementById('datepicker').value;
-    var days =      ['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'];
     if(date !== ""){
         var res =               date.split("/");
         res[0]--;

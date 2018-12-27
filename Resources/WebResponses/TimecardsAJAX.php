@@ -19,6 +19,23 @@ if(session_status() == PHP_SESSION_NONE){
     session_start();
 }
 
+if(isset($_POST['holidaysFecha'])){
+    $semana =           array();
+    $SD =               $_POST['holidaysFecha'];
+    $query =            $connection->prepare("SELECT ID FROM holidays WHERE DATE(Day) = DATE(?)");
+    for($i = 6; $i >= 0; $i--){
+        $query ->           bind_param("s", $fecha);
+        $fecha =            date("Y-m-d", strtotime("$SD -$i days"));
+        $query ->           execute();
+        $query ->           store_result();
+        if($query -> num_rows > 0){
+            array_push($semana, 7-$i);
+        }
+        $query ->            free_result();
+    }
+    echo json_encode($semana);
+}
+
 if(isset($_POST['checkNames'])){
     $_SESSION['cardsSubmit'] = null;
     $fecha =            $_POST['fechaCheck'];
