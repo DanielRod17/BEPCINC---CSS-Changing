@@ -42,7 +42,13 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                         }
                     });
                 });
-                actualizarTabla(document.getElementById('datepicker'));
+                <?php
+                if($_SESSION['consultor']['Type'] != '0'){
+                ?>
+                    actualizarTabla(document.getElementById('datepicker'));
+                <?php
+                }
+                ?>
             </script>
             <meta charset="UTF-8">
             <title>
@@ -206,6 +212,9 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                             }
                                             $queryCards ->  close();
                                         ?>
+                                    <div class="sort-timecard">
+                                        <i class="far fa-caret-square-up"></i>
+                                    </div>
                                 </div>
                                 <?php 
                                 if($_SESSION['consultor']['Type'] == '0'){
@@ -219,6 +228,10 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                                 }
                                                 $queryCards ->  close();
                                             ?>
+                                        
+                                        <div class="sort-timecard">
+                                            <i class="far fa-caret-square-up"></i>
+                                        </div>
                                     </div>
                                 <?php
                                 }
@@ -241,12 +254,21 @@ if (isset($_SESSION['consultor']['Login']) && $_SESSION['consultor']['Login'] ==
                                         }
                                         $queryCards ->  close();
                                     ?>
+                                    <div class="sort-timecard">
+                                        <i class="far fa-caret-square-up"></i>
+                                    </div>
                                 </div>
                                 <div class='startD searchParam'>
                                     <input type="date" placeholder="From" class='searchFilters' id="start" id="projectIDSearch">
+                                    <div class="sort-timecard">
+                                        <i class="far fa-caret-square-up"></i>
+                                    </div>
                                 </div>
                                 <div class='endD searchParam'>
                                     <input type="date" id="end" class='searchFilters' placeholder="To" id="projectIDSearch">
+                                    <div class="sort-timecard">
+                                        <i class="far fa-caret-square-up"></i>
+                                    </div>
                                 </div>
                                 <div class='status searchParam'>
                                     <select id="statusSearch" class="searchParam" class='searchFilters'>

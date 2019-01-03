@@ -60,9 +60,6 @@ function searchCards(){
     var Form =          document.getElementById('SearchTable');
     var section =       document.getElementsByTagName('h1');
     var url =           "";
-    if(section[0].innerHTML.toLowerCase() === "timecards"){
-        url =               "../Resources/WebResponses/TimecardsAJAX.php";
-    }
     if(section[0].innerHTML.toLowerCase() === "contacts"){
         url =               "../Resources/WebResponses/AddUserAJAX.php";
     }
@@ -77,18 +74,38 @@ function searchCards(){
     }
     if(section[0].innerHTML.toLowerCase() === "expenses"){
         url =               "../Resources/WebResponses/ExpensesAJAX.php";
+        var icons =         document.getElementsByClassName('sort-timecard').innerHTML;
     }
     var childs =        Form.elements;
     for(I = 0; I < childs.length - 1; I++) {
         var Value =       childs[I].value;
         info.push(Value);
     }
+    var changed = 6;
+    if(section[0].innerHTML.toLowerCase() === "timecards"){
+        url =               "../Resources/WebResponses/TimecardsAJAX.php";
+        var icons =         document.getElementsByClassName('sort-timecard');
+        for (var i = 0; i < icons.length; i++){
+            //alert(icons[i].innerHTML.replace(/\s+/g, " "));
+            if(icons[i].innerHTML == "<i class=\"far fa-caret-square-down\"></i>"){
+                info.push('DESC');
+            }else{
+                info.push('ASC');
+            }
+            if(icons[i].id == 'changed'){
+                changed = i+6;
+            }
+        }
+    }
+    info.push(changed);
+    //alert(info);
     var deleteClass =             document.getElementsByClassName('contacto');
     $.ajax({ //PERFORM AN AJAX CALL
         type:                   'post',
         url:                    url, //PHP CONTAINING ALL THE FUNCTIONS
         data:                   {searchCards: info}, //SEND THE VALUE TO EXECUTE A QUERY WITH THE PALLET ID
         success: function(e) {
+            //alert(e);
             if(e === "No Results Found :("){
                 DisplayError(e);
             }else{

@@ -199,23 +199,27 @@ function DisplayExpenses($connection, $ID){
                 Qty
             </div>
             <div class='EXPcolumna'>
-                Currency
-            </div>
-            <div class='EXPcolumna'>
                 Billable
             </div>
             <div class='EXPcolumna'>
                 Refundable
             </div>
+            <div class='EXPcolumna'>
+                Status
+            </div>
         </div>";
             if(!empty($resultado)){
                 foreach($resultado as $fila){
-                    $currency =         "MXN";
+                    if($fila['Status'] == '0'){
+                        $status =           'Submitted';
+                    }
                     $billable =         "No";
                     $refundable =       "No";
-                    
-                    if($fila['Currency'] == "1")
-                        $currency =         "USD";
+                    $cant =             $fila['Quantity'];
+                    if($fila['Currency'] == "0"){
+                        //$cant =         substr($cant/$fila['DOF'], 0, 5);
+                        $cant =         number_format(substr($cant/$fila['DOF'], 0, 5), 2, '.', '');
+                    }
                     if($fila['Billable'] == "1")
                         $billable =         "Yes";
                     if($fila['Refundable'] == "1")
@@ -229,10 +233,7 @@ function DisplayExpenses($connection, $ID){
                             ".substr($fila['ExpenseDate'],0 ,10)."
                         </div>
                         <div class='EXPcolumna'>
-                            $".$fila['Quantity']."
-                        </div>
-                        <div class='EXPcolumna'>
-                            ".$currency."
+                            $".$cant."
                         </div>
                         <div class='EXPcolumna'>
                             ".$billable."
@@ -240,12 +241,15 @@ function DisplayExpenses($connection, $ID){
                         <div class='EXPcolumna'>
                             ".$refundable."
                         </div>
+                        <div class='EXPcolumna'>
+                            $status
+                        </div>
                     </div>";
                 }
             }else{
                 echo "<div id='timecardsLine'>
                     <div class='Line'>
-                        No timecards found
+                        No expenses found
                     </div>
                 </div>";
             }
@@ -280,19 +284,19 @@ function DisplayDetails($connection, $ID){
     }
     $query ->               close();
 
-    $queryCategory =          $connection->prepare("SELECT  ec.*, delv.totalDelivered, delv.Currency
+    $queryCategory =          $connection->prepare("SELECT  ec.*, delv.totalDelivered, delv.Currency, delv.DOF
                                                   FROM expensecategory ec 
-                                                  LEFT JOIN (SELECT Category, Currency, SUM(Quantity) AS 'totalDelivered' FROM expenses WHERE TravelID=?  GROUP BY Category, Currency) AS delv 
+                                                  LEFT JOIN (SELECT Category, Currency, SUM(Quantity) AS 'totalDelivered', DOF FROM expenses WHERE TravelID=?  GROUP BY Category, Currency) AS delv 
                                                   ON ec.ID =  delv.Category");
     $queryCategory ->         bind_param('i', $I);
     $I =                      $ID;
     $queryCategory ->         execute();
-    $queryCategory ->         bind_result($IDI, $Nome, $totalDel, $Currency);
+    $queryCategory ->         bind_result($IDI, $Nome, $totalDel, $Currency, $DOF);
     $arrayCategories =        array();
     while($queryCategory -> fetch()){
         $cu =       "USD";
         if($Currency == "0")
-            $cu =   "MXN";
+            $totalDel =         number_format(substr($totalDel/$DOF, 0, 5), 2, '.', '');
         if(!array_key_exists("$Nome",       $arrayCategories)){
             $arrayCategories["$Nome"] =     array(array($totalDel, $cu));
         }else{
@@ -364,12 +368,17 @@ function DisplayDetails($connection, $ID){
                             $key Expenses
                         </div>
                         <div class='campoDato'>";
-                                if($value[0][0] !== null)
-                                    $content = $content."$".$value[0][0]." ".$value[0][1];
-                                else
-                                    $content = $content."N/A";
-                                if(array_key_exists(1, $value))
-                                    $content = $content." -  $".$value[1][0]." ". $value[1][1];
+                                $totalExp = 0;
+                                if($value[0][0] !== null){
+                                    $totalExp += $value[0][0];
+                                    if(array_key_exists(1, $value))
+                                        $totalExp += $value[1][0];   
+                                    //$content = $content."$".$value[0][0]." ".$value[0][1];
+                                }
+                                else{
+                                    $totalExp = "N/A";
+                                }
+                                    $content = $content." $".$totalExp." USD";
                                 $content = $content."<div class='lapiz'>
                                 <i class='fas fa-pencil-alt'></i>
                             </div>

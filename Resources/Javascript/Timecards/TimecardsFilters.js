@@ -62,7 +62,8 @@ function searchCards(){
         var Value =       childs[I].value;
         info.push(Value);
     }
-    var deleteClass =             document.getElementsByClassName('contacto');
+    alert(info);
+    /*var deleteClass =             document.getElementsByClassName('contacto');
     $.ajax({ //PERFORM AN AJAX CALL
         type:                   'post',
         url:                    '../Resources/WebResponses/TimecardsAJAX.php', //PHP CONTAINING ALL THE FUNCTIONS
@@ -91,6 +92,6 @@ function searchCards(){
                 alert("No results found :(");
             }
         }
-    });
+    });*/
     return false;
 }

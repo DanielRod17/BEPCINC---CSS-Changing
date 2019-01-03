@@ -151,7 +151,7 @@ if(isset($_FILES) && isset($_POST['Travel'])){
         $cadenita =         "";
         $errors =           array();
         $files =            array();
-        $expensions =       array("jpeg","jpg","png", "pdf", "sql");
+        $expensions =       array("jpeg","jpg","png", "pdf");
         $fiNam =            '1';
         for($i = 1; $i <= $totalArr; $i++){
             if($_POST["Travel$i-1"] == "" || $_POST["Travel$i-1"] == null){
@@ -170,7 +170,7 @@ if(isset($_FILES) && isset($_POST['Travel'])){
                 $ext =          strtolower(end($ext));
                 if(in_array($ext, $expensions )=== false){
                     $flag =         1;
-                    $errors[] =  "Couldn't upload file(s):  $nombre<br>";
+                    $errors[] =     "Couldn't upload file(s):  $nombre<br>";
                 }else{
                     $dirname =      $_SESSION['consultor']['Email'];
                     $cadenita =     $cadenita."$date/".$nombre."~";

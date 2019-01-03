@@ -486,29 +486,26 @@ if(isset($_POST['searchCards'])){
         array_splice( $info, 1, 0, $insert );
     }
     $results =              array();
-    /*
-     * SELECT l.ID, consultors.ID 
-        FROM lineas l
-        INNER JOIN consultors ON(consultors.ID = l.ConsultorID)
-        WHERE CONCAT(consultors.Firstname,' ', consultors.Lastname) LIKE '%f%'
-     * 
-     * SELECT ID FROM lineas WHERE TimecardID LIKE 
-     */
     if($info[5] != "All"){
         $Su =                   array(intval($info[5]));
     }else{
         $Su =                   array(0, 1);
     }
-    $query =                $connection->prepare("SELECT l.ID, l.TimecardID, consultors.Firstname, consultors.Lastname, assignment.Name as aName, l.StartingDay, DATE_ADD(l.startingDay, INTERVAL 6 DAY) as EDay, l.Submitted, l.Mon, l.Tue, l.Wed, l.Thu, l.Fri, l.Sat, l.Sun 
-                                                FROM lineas l
-                                                INNER JOIN consultors ON(consultors.ID = l.ConsultorID)
-                                                INNER JOIN assignment ON(l.AssignmentID = assignment.ID)
-                                                WHERE CONCAT(consultors.Firstname,' ', consultors.Lastname) LIKE ?
-                                                AND assignment.Name LIKE ?
-                                                AND DATE(l.StartingDay) BETWEEN DATE(?) AND DATE(?)
-                                                AND l.Submitted  IN (". implode(',', $Su) . ")
-                                                AND TimecardID LIKE ?
-                                                ORDER BY ID ASC");
+    $consulta =             "SELECT l.ID, l.TimecardID, CONCAT(consultors.Firstname,' ', consultors.Lastname) as firstlast, assignment.Name as aName, l.StartingDay, DATE_ADD(l.startingDay, INTERVAL 6 DAY) as EDay, l.Submitted, l.Mon, l.Tue, l.Wed, l.Thu, l.Fri, l.Sat, l.Sun 
+                            FROM lineas l
+                            INNER JOIN consultors ON(consultors.ID = l.ConsultorID)
+                            INNER JOIN assignment ON(l.AssignmentID = assignment.ID)
+                            WHERE CONCAT(consultors.Firstname,' ', consultors.Lastname) LIKE ?
+                            AND assignment.Name LIKE ?
+                            AND DATE(l.StartingDay) BETWEEN DATE(?) AND DATE(?)
+                            AND l.Submitted  IN (". implode(',', $Su) . ")
+                            AND TimecardID LIKE ?";
+    
+    /////////////////////////////////////////////////////////////
+    $consulta =             addParams($info, $consulta);
+    /////////////////////////////////////////////////////////////
+    //echo $consulta;
+    $query =                $connection->prepare($consulta);
     $query ->               bind_param("sssss", $R, $A, $SD, $ED, $T);
     $R =                    "%{$info[1]}%";
     $A =                    "%{$info[2]}%";
@@ -541,7 +538,7 @@ if(isset($_POST['searchCards'])){
             //$results[] =            array($row['ID'], $row['TimecardID'], $row['Firstname']." ".$row['Lastname'], $row['aName'], substr($row['StartingDay'], 0, 10), substr($row['EDay'], 0, 10), $Sub, $days, $hours);
             $cadena = $cadena."<div class='contacto'>";
                         $cadena = $cadena."<div class='timeCard' style='cursor: pointer;' onclick=\"LoadPage('Timecard.php?id=".$row['ID']."');\">".$row['TimecardID']."</div>";
-                        $cadena = $cadena."<div class='resource'>".$row['Firstname']." ".$row['Lastname']."</div>";
+                        $cadena = $cadena."<div class='resource'>".$row['firstlast']."</div>";
                         $cadena = $cadena."<div class='tProj'>".$row['aName']."</div>";
                         $cadena = $cadena."<div class='startD'>".substr($row['StartingDay'], 0, 10)."</div>";
                         $cadena = $cadena."<div class='endD'>".substr($row['EDay'], 0, 10)."</div>";
@@ -553,8 +550,79 @@ if(isset($_POST['searchCards'])){
         echo $cadena;
     } else {
         echo "No Results Found :(";
-        # No data actions
-        //$results[] =            "No Results Found :(";
-        //echo json_encode($results);
     }
+}
+
+function addParams($info, $consulta){
+    if($_SESSION['consultor']['Type'] == '0'){
+        $array =        array("6" => "TimecardID", "7" => "firstlast", "8" => "aName", "9" => "StartingDay", "10" => "EDay");
+        if(end($info) == '6'){
+            $consulta = $consulta." ORDER BY TimecardID ".$info[6];
+            foreach($array as $key => $value){
+                if($key != end($info)){
+                    $consulta = $consulta.", $value ".$info[$key];
+                }
+            }
+        }else if(end($info) == '7'){
+            $consulta = $consulta." ORDER BY firstlast ".$info[7];
+            foreach($array as $key => $value){
+                if($key != end($info)){
+                    $consulta = $consulta.", $value ".$info[$key];
+                }
+            }
+        }else if(end($info) == '8'){
+            $consulta = $consulta." ORDER BY aName ".$info[8];
+            foreach($array as $key => $value){
+                if($key != end($info)){
+                    $consulta = $consulta.", $value ".$info[$key];
+                }
+            }
+        }else if(end($info) == '9'){
+            $consulta = $consulta." ORDER BY StartingDay ".$info[9];
+            foreach($array as $key => $value){
+                if($key != end($info)){
+                    $consulta = $consulta.", $value ".$info[$key];
+                }
+            }
+        }else if(end($info) == '10'){
+            $consulta = $consulta." ORDER BY EDay ".$info[10];
+            foreach($array as $key => $value){
+                if($key != end($info)){
+                    $consulta = $consulta.", $value ".$info[$key];
+                }
+            }
+        }
+    }else{
+        $array =        array("6" => "TimecardID", "7" => "aName", "8" => "StartingDay", "9" => "EDay");
+        if(end($info) == '6'){
+            $consulta = $consulta." ORDER BY TimecardID ".$info[6];
+            foreach($array as $key => $value){
+                if($key != end($info)){
+                    $consulta = $consulta.", $value ".$info[$key];
+                }
+            }
+        }else if(end($info) == '7'){
+            $consulta = $consulta." ORDER BY aName ".$info[7];
+            foreach($array as $key => $value){
+                if($key != end($info)){
+                    $consulta = $consulta.", $value ".$info[$key];
+                }
+            }
+        }else if(end($info) == '8'){
+            $consulta = $consulta." ORDER BY StartingDay ".$info[8];
+            foreach($array as $key => $value){
+                if($key != end($info)){
+                    $consulta = $consulta.", $value ".$info[$key];
+                }
+            }
+        }else if(end($info) == '9'){
+            $consulta = $consulta." ORDER BY EDay ".$info[9];
+            foreach($array as $key => $value){
+                if($key != end($info)){
+                    $consulta = $consulta.", $value ".$info[$key];
+                }
+            }
+        }
+    }
+    return $consulta;
 }

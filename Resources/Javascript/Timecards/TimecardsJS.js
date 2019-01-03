@@ -8,6 +8,8 @@
 var popElement = document.getElementsByClassName("noteDay");
 var popWeek =    document.getElementsByClassName("noteWeek");
 document.addEventListener('click', function(event) {
+    
+    //alert(event.target.className);
     if (event.target.className != 'noteDay' && event.target.className != 'notaDesc' && event.target.className == 'noteWeek') {
         for(var i = 0; i < popElement.length; i++){
             popElement[i].style.display =   'none';
@@ -25,7 +27,28 @@ document.addEventListener('click', function(event) {
             popWeek[i].style.display =   'none';
         }
     }
+    
+    if(event.target.className == 'far fa-caret-square-up'){
+        var flechas = document.getElementsByClassName('sort-timecard');
+        for(var i = 0; i < flechas.length; i++){
+            flechas[i].id = '';
+        }
+        event.target.parentNode.id = 'changed';
+        event.target.parentNode.innerHTML = '<i class="far fa-caret-square-down"></i>';
+    }
+    
+    if(event.target.className == 'far fa-caret-square-down'){
+        var flechas = document.getElementsByClassName('sort-timecard');
+        for(var i = 0; i < flechas.length; i++){
+            flechas[i].id = '';
+        }
+        event.target.parentNode.id = 'changed';
+        event.target.parentNode.innerHTML = '<i class="far fa-caret-square-up"></i>';
+    }
+    
+    
 });
+
 
 
 document.body.addEventListener( 'change', function ( event ) {
